@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { exportProposalToPDF } from '@/lib/pdfExport';
 
 export default function ProposalPreview({
   proposal,
@@ -10,6 +11,7 @@ export default function ProposalPreview({
   saved,
 }) {
   const [activeTab, setActiveTab] = useState('overview');
+  const [exporting, setExporting] = useState(false);
 
   const formatCurrency = (amount) => {
     return new Intl.NumberFormat('en-US', {
@@ -17,6 +19,18 @@ export default function ProposalPreview({
       currency: 'USD',
       minimumFractionDigits: 2,
     }).format(amount);
+  };
+
+  const handleExportPDF = () => {
+    setExporting(true);
+    try {
+      exportProposalToPDF(proposal, formatCurrency);
+    } catch (error) {
+      console.error("Error generating PDF:", error);
+      alert("Failed to generate PDF. Check console for details.");
+    } finally {
+      setExporting(false);
+    }
   };
 
   const tabs = [
@@ -55,11 +69,10 @@ export default function ProposalPreview({
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`flex-1 py-3 px-4 text-sm font-medium transition-colors ${
-                activeTab === tab.id
-                  ? 'text-primary-600 border-b-2 border-primary-600 bg-primary-50'
-                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
-              }`}
+              className={`flex-1 py-3 px-4 text-sm font-medium transition-colors ${activeTab === tab.id
+                ? 'text-primary-600 border-b-2 border-primary-600 bg-primary-50'
+                : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+                }`}
             >
               <span className="mr-2">{tab.icon}</span>
               {tab.label}
@@ -84,19 +97,18 @@ export default function ProposalPreview({
 
       {/* Footer Actions */}
       <div className="border-t border-gray-200 p-6 bg-gray-50">
-        <div className="flex space-x-3">
+        <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-3">
           <button
             onClick={onSave}
             disabled={saving || saved}
-            className={`flex-1 py-3 px-4 rounded-lg font-semibold transition-all flex items-center justify-center space-x-2 ${
-              saved
-                ? 'bg-green-500 text-white'
-                : 'bg-primary-600 text-white hover:bg-primary-700 disabled:bg-gray-400'
-            }`}
+            className={`flex-1 py-3 px-4 rounded-lg font-semibold transition-all flex items-center justify-center space-x-2 ${saved
+              ? 'bg-green-500 text-white'
+              : 'bg-primary-600 text-white hover:bg-primary-700 disabled:bg-gray-400'
+              }`}
           >
             {saving ? (
               <>
-                <div className="loading-spinner border-white border-t-transparent" />
+                <div className="loader-save" />
                 <span>Saving...</span>
               </>
             ) : saved ? (
@@ -132,6 +144,25 @@ export default function ProposalPreview({
                   />
                 </svg>
                 <span>Save to Database</span>
+              </>
+            )}
+          </button>
+          <button
+            onClick={handleExportPDF}
+            disabled={exporting}
+            className="flex-1 py-3 px-4 rounded-lg font-semibold bg-gray-900 text-white hover:bg-gray-800 transition-all flex items-center justify-center space-x-2 disabled:bg-gray-400"
+          >
+            {exporting ? (
+              <>
+                <div className="loader-export" />
+                <span>Exporting...</span>
+              </>
+            ) : (
+              <>
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                </svg>
+                <span>Export PDF</span>
               </>
             )}
           </button>
@@ -279,9 +310,11 @@ function BudgetTab({ proposal, formatCurrency }) {
             {formatCurrency(totalAllocated)}
           </span>
         </div>
-        <div className="border-t border-gray-200 pt-4 flex justify-between items-center">
-          <span className="text-gray-600">Remaining</span>
-          <span className="font-semibold text-green-600">
+        <div className="border-t border-gray-200 pt-4 flex justify-between items-center bg-green-50 p-3 rounded-lg mt-2">
+          <span className="font-medium text-green-800 flex items-center">
+            <span className="mr-2">🎉</span> Money Saved
+          </span>
+          <span className="font-bold text-green-700 text-lg">
             {formatCurrency(proposal.totalBudget - totalAllocated)}
           </span>
         </div>
@@ -332,10 +365,10 @@ function BudgetTab({ proposal, formatCurrency }) {
                 {Object.entries(proposal.budgetAllocation).map(
                   ([key, value]) => (
                     <tr key={key} className="hover:bg-gray-50">
-                      <td className="px-4 py-3 capitalize">
+                      <td className="px-4 py-3 capitalize text-gray-900">
                         {key.replace(/([A-Z])/g, ' $1').trim()}
                       </td>
-                      <td className="px-4 py-3 text-right font-medium">
+                      <td className="px-4 py-3 text-right font-medium text-gray-900">
                         {formatCurrency(value)}
                       </td>
                     </tr>

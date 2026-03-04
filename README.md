@@ -1,5 +1,5 @@
 # Rayeva B2B Proposal Generator
-
+--fix ui , the fianl pdf to be more detailed and nice
 An AI-powered B2B proposal generation module for Rayeva's sustainable commerce platform. This application uses OpenAI's GPT-4 to generate comprehensive sustainable product proposals with budget allocation and environmental impact metrics.
 
 ## Features

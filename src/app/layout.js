@@ -12,10 +12,10 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={inter.className}>
-        <div className="min-h-screen bg-gray-50">
+        <div className="min-h-screen bg-gray-50 flex flex-col">
           {/* Header */}
-          <header className="bg-white shadow-sm border-b border-gray-200">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <header className="bg-white shadow-sm border-b border-gray-200 z-10 flex-shrink-0">
+            <div className="px-4 sm:px-6 lg:px-8">
               <div className="flex items-center justify-between h-16">
                 <div className="flex items-center">
                   <div className="flex-shrink-0">
@@ -44,20 +44,20 @@ export default function RootLayout({ children }) {
             </div>
           </header>
 
-          {/* Main Content */}
-          <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          {/* Body: Sidebar + Content */}
+          <div className="flex flex-1 overflow-hidden">
             {children}
-          </main>
+          </div>
 
           {/* Footer */}
-          <footer className="bg-white border-t border-gray-200 mt-auto">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+          <footer className="bg-white border-t border-gray-200 flex-shrink-0">
+            <div className="px-4 sm:px-6 lg:px-8 py-4">
               <div className="flex items-center justify-between">
                 <p className="text-sm text-gray-500">
-                  © 2024 Rayeva. All rights reserved.
+                  © 2026 Rayeva. All rights reserved.
                 </p>
                 <p className="text-sm text-gray-500">
-                  Powered by OpenAI GPT-4
+                  Powered by OpenRouter AI
                 </p>
               </div>
             </div>

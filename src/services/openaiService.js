@@ -107,21 +107,34 @@ Please provide a comprehensive proposal with product recommendations, budget all
       timestamp: new Date().toISOString(),
     });
 
-    // Call OpenAI API
-    const response = await openai.chat.completions.create({
-      model: 'liquid/lfm-2.5-1.2b-thinking:free',
-      messages: [
-        { role: 'system', content: SYSTEM_PROMPT },
-        { role: 'user', content: userPrompt },
-      ],
-      temperature: 0.7,
-      max_tokens: 2500,
-    });
+    // Call AI API with retry on empty response
+    let response;
+    let content;
+    const MAX_RETRIES = 2;
 
-    const content = response.choices[0]?.message?.content;
+    for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
+      response = await openai.chat.completions.create({
+        model: 'liquid/lfm-2.5-1.2b-thinking:free',
+        messages: [
+          { role: 'system', content: SYSTEM_PROMPT },
+          { role: 'user', content: userPrompt },
+        ],
+        temperature: 0.7,
+        max_tokens: 4000,
+      });
 
-    if (!content) {
-      throw new Error('Empty response from OpenAI');
+      // Some thinking models put output in 'reasoning' field instead of 'content'
+      const choice = response.choices[0];
+      content = choice?.message?.content || choice?.message?.reasoning || '';
+
+      if (content && content.trim().length > 0) break;
+
+      console.warn(`Attempt ${attempt}: Empty response from AI, retrying...`);
+      if (attempt === MAX_RETRIES) {
+        throw new Error('AI returned an empty response after multiple attempts. The model may be rate-limited or overloaded. Please try again in a few seconds.');
+      }
+      // Wait 2 seconds before retrying
+      await new Promise(resolve => setTimeout(resolve, 2000));
     }
 
     // Log the raw response
@@ -135,12 +148,15 @@ Please provide a comprehensive proposal with product recommendations, budget all
     // Parse JSON response
     let proposalData;
     try {
-      // Clean up the response - remove markdown code blocks if present
-      const cleanContent = content
-        .replace(/```json\n?/g, '')
-        .replace(/```\n?/g, '')
-        .trim();
+      // Clean up the response - remove <think> blocks and extra text
+      let cleanContent = content.replace(/<think>[\s\S]*?<\/think>/g, '');
+      const jsonMatch = cleanContent.match(/\{[\s\S]*\}/);
 
+      if (!jsonMatch) {
+        throw new Error('No JSON object found in the response');
+      }
+
+      cleanContent = jsonMatch[0].trim();
       proposalData = JSON.parse(cleanContent);
     } catch (parseError) {
       logger.logError('JSON Parse Error', parseError);

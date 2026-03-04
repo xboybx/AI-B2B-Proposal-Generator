@@ -98,8 +98,8 @@ export default function ProposalForm({ onSubmit, loading, disabled }) {
             placeholder="e.g., GreenTech Solutions Inc."
             disabled={disabled}
             className={`w-full px-4 py-3 text-gray-900 rounded-lg border ${errors.clientName
-                ? 'border-red-500 focus:ring-red-500'
-                : 'border-gray-300 focus:ring-primary-500'
+              ? 'border-red-500 focus:ring-red-500'
+              : 'border-gray-300 focus:ring-primary-500'
               } focus:outline-none focus:ring-2 focus:border-transparent transition-colors disabled:bg-gray-100 disabled:cursor-not-allowed`}
           />
           {errors.clientName && (
@@ -130,8 +130,8 @@ export default function ProposalForm({ onSubmit, loading, disabled }) {
               step="0.01"
               disabled={disabled}
               className={`w-full pl-8 pr-4 py-3 text-gray-900 rounded-lg border ${errors.totalBudget
-                  ? 'border-red-500 focus:ring-red-500'
-                  : 'border-gray-300 focus:ring-primary-500'
+                ? 'border-red-500 focus:ring-red-500'
+                : 'border-gray-300 focus:ring-primary-500'
                 } focus:outline-none focus:ring-2 focus:border-transparent transition-colors disabled:bg-gray-100 disabled:cursor-not-allowed`}
             />
           </div>
@@ -160,8 +160,8 @@ export default function ProposalForm({ onSubmit, loading, disabled }) {
             rows={4}
             disabled={disabled}
             className={`w-full px-4 py-3 text-gray-900 rounded-lg border ${errors.sustainabilityGoals
-                ? 'border-red-500 focus:ring-red-500'
-                : 'border-gray-300 focus:ring-primary-500'
+              ? 'border-red-500 focus:ring-red-500'
+              : 'border-gray-300 focus:ring-primary-500'
               } focus:outline-none focus:ring-2 focus:border-transparent transition-colors resize-none disabled:bg-gray-100 disabled:cursor-not-allowed`}
           />
           {errors.sustainabilityGoals && (
@@ -202,7 +202,11 @@ export default function ProposalForm({ onSubmit, loading, disabled }) {
         >
           {loading ? (
             <>
-              <div className="loading-spinner" />
+              <div className="loader-generate">
+                <div></div>
+                <div></div>
+                <div></div>
+              </div>
               <span>Generating Proposal...</span>
             </>
           ) : (
