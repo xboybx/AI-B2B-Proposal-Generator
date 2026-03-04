@@ -97,11 +97,10 @@ export default function ProposalForm({ onSubmit, loading, disabled }) {
             onChange={handleChange}
             placeholder="e.g., GreenTech Solutions Inc."
             disabled={disabled}
-            className={`w-full px-4 py-3 rounded-lg border ${
-              errors.clientName
+            className={`w-full px-4 py-3 text-gray-900 rounded-lg border ${errors.clientName
                 ? 'border-red-500 focus:ring-red-500'
                 : 'border-gray-300 focus:ring-primary-500'
-            } focus:outline-none focus:ring-2 focus:border-transparent transition-colors disabled:bg-gray-100 disabled:cursor-not-allowed`}
+              } focus:outline-none focus:ring-2 focus:border-transparent transition-colors disabled:bg-gray-100 disabled:cursor-not-allowed`}
           />
           {errors.clientName && (
             <p className="mt-1 text-sm text-red-500">{errors.clientName}</p>
@@ -130,11 +129,10 @@ export default function ProposalForm({ onSubmit, loading, disabled }) {
               min="1"
               step="0.01"
               disabled={disabled}
-              className={`w-full pl-8 pr-4 py-3 rounded-lg border ${
-                errors.totalBudget
+              className={`w-full pl-8 pr-4 py-3 text-gray-900 rounded-lg border ${errors.totalBudget
                   ? 'border-red-500 focus:ring-red-500'
                   : 'border-gray-300 focus:ring-primary-500'
-              } focus:outline-none focus:ring-2 focus:border-transparent transition-colors disabled:bg-gray-100 disabled:cursor-not-allowed`}
+                } focus:outline-none focus:ring-2 focus:border-transparent transition-colors disabled:bg-gray-100 disabled:cursor-not-allowed`}
             />
           </div>
           {errors.totalBudget && (
@@ -161,11 +159,10 @@ export default function ProposalForm({ onSubmit, loading, disabled }) {
             placeholder="e.g., Reduce plastic waste, achieve carbon neutrality, switch to recycled materials..."
             rows={4}
             disabled={disabled}
-            className={`w-full px-4 py-3 rounded-lg border ${
-              errors.sustainabilityGoals
+            className={`w-full px-4 py-3 text-gray-900 rounded-lg border ${errors.sustainabilityGoals
                 ? 'border-red-500 focus:ring-red-500'
                 : 'border-gray-300 focus:ring-primary-500'
-            } focus:outline-none focus:ring-2 focus:border-transparent transition-colors resize-none disabled:bg-gray-100 disabled:cursor-not-allowed`}
+              } focus:outline-none focus:ring-2 focus:border-transparent transition-colors resize-none disabled:bg-gray-100 disabled:cursor-not-allowed`}
           />
           {errors.sustainabilityGoals && (
             <p className="mt-1 text-sm text-red-500">

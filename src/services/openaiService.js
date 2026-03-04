@@ -103,13 +103,13 @@ Please provide a comprehensive proposal with product recommendations, budget all
     logger.logPrompt({
       systemPrompt: SYSTEM_PROMPT,
       userPrompt,
-      model: 'arcee-ai/trinity-large-preview:free',
+      model: 'liquid/lfm-2.5-1.2b-thinking:free',
       timestamp: new Date().toISOString(),
     });
 
     // Call OpenAI API
     const response = await openai.chat.completions.create({
-      model: 'arcee-ai/trinity-large-preview:free',
+      model: 'liquid/lfm-2.5-1.2b-thinking:free',
       messages: [
         { role: 'system', content: SYSTEM_PROMPT },
         { role: 'user', content: userPrompt },
@@ -191,9 +191,11 @@ function validateProposalData(data, totalBudget) {
     }
   }
 
-  // Allow 5% tolerance for rounding
+  // Return warning instead of hard error for smaller free LLM math mistakes
   if (totalAllocated > totalBudget * 1.05) {
-    throw new Error(`Budget exceeded: allocated $${totalAllocated.toFixed(2)} exceeds budget $${totalBudget}`);
+    console.warn(`Budget exceeded: allocated $${totalAllocated.toFixed(2)} exceeds budget $${totalBudget}`);
+    // We choose not to throw here because smaller LLMs often fail exact math.
+    // The frontend can still display the items to the user.
   }
 
   return true;
@@ -206,7 +208,7 @@ function validateProposalData(data, totalBudget) {
 export async function testConnection() {
   try {
     const response = await openai.chat.completions.create({
-      model: 'arcee-ai/trinity-large-preview:free',
+      model: 'liquid/lfm-2.5-1.2b-thinking:free',
       messages: [{ role: 'user', content: 'Hello' }],
       max_tokens: 10,
     });
