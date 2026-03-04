@@ -18,12 +18,9 @@
 
 body {
   color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
+  background: linear-gradient(to bottom,
       transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+      rgb(var(--background-end-rgb))) rgb(var(--background-start-rgb));
 }
 
 @layer utilities {
@@ -31,6 +28,12 @@ body {
     text-wrap: balance;
   }
 }
+
+/* Sidebar smooth slide */
+aside[class*="translate"] {
+  will-change: transform;
+}
+
 
 /* Custom scrollbar */
 ::-webkit-scrollbar {
@@ -58,6 +61,7 @@ body {
     opacity: 0;
     transform: translateY(10px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -69,9 +73,12 @@ body {
 }
 
 @keyframes pulse-green {
-  0%, 100% {
+
+  0%,
+  100% {
     box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4);
   }
+
   50% {
     box-shadow: 0 0 0 10px rgba(16, 185, 129, 0);
   }
@@ -90,6 +97,7 @@ body {
   align-items: center;
   gap: 4px;
 }
+
 .loader-generate div {
   width: 6px;
   height: 6px;
@@ -97,12 +105,26 @@ body {
   border-radius: 50%;
   animation: bounce 1.4s infinite ease-in-out both;
 }
-.loader-generate div:nth-child(1) { animation-delay: -0.32s; }
-.loader-generate div:nth-child(2) { animation-delay: -0.16s; }
+
+.loader-generate div:nth-child(1) {
+  animation-delay: -0.32s;
+}
+
+.loader-generate div:nth-child(2) {
+  animation-delay: -0.16s;
+}
 
 @keyframes bounce {
-  0%, 80%, 100% { transform: scale(0); }
-  40% { transform: scale(1); }
+
+  0%,
+  80%,
+  100% {
+    transform: scale(0);
+  }
+
+  40% {
+    transform: scale(1);
+  }
 }
 
 /* 2. Save Loader - Double Ring */
@@ -124,6 +146,7 @@ body {
   position: relative;
   overflow: hidden;
 }
+
 .loader-export::after {
   content: '';
   position: absolute;
@@ -137,10 +160,17 @@ body {
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 @keyframes scan {
-  0% { transform: translateY(-5px); }
-  100% { transform: translateY(20px); }
+  0% {
+    transform: translateY(-5px);
+  }
+
+  100% {
+    transform: translateY(20px);
+  }
 }
