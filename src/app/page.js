@@ -17,6 +17,7 @@ export default function Home() {
   const [savedProposalId, setSavedProposalId] = useState(null);
   const [activeProposalId, setActiveProposalId] = useState(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [activeMobileTab, setActiveMobileTab] = useState('generator'); // 'generator' or 'preview'
 
   const handleGenerate = async (formData) => {
     setGenerating(true);
@@ -82,24 +83,24 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col selection:bg-rayeva-lime/30">
+    <div className="min-h-screen flex flex-col selection:bg-rayeva-lime/30 overflow-x-hidden">
       <div className="pulse-bg" />
 
       {/* ── Top Navigation ─────────────────────────────────────── */}
-      <header className="fixed top-0 left-0 right-0 h-20 z-50 flex items-center px-6 lg:px-12">
-        <div className="w-full h-16 glass-card rounded-2xl flex items-center px-6 transition-all duration-500 hover:shadow-2xl hover:shadow-rayeva-emerald/5">
+      <header className="fixed top-0 left-0 right-0 h-20 z-50 flex items-center px-4 md:px-6 lg:px-12">
+        <div className="w-full h-16 glass-card rounded-2xl flex items-center px-4 md:px-6 transition-all duration-500 hover:shadow-2xl hover:shadow-rayeva-emerald/5">
           {/* Hamburger */}
           <button
             onClick={() => setSidebarOpen((prev) => !prev)}
-            className="mr-4 p-2.5 rounded-xl text-slate-600 hover:text-rayeva-emerald hover:bg-rayeva-lime/20 transition-all active:scale-95"
+            className="mr-3 md:mr-4 p-2 md:p-2.5 rounded-xl text-slate-600 hover:text-rayeva-emerald hover:bg-rayeva-lime/20 transition-all active:scale-95"
             aria-label="Toggle sidebar"
           >
             {sidebarOpen ? (
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
               </svg>
             ) : (
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
               </svg>
             )}
@@ -107,10 +108,10 @@ export default function Home() {
 
           {/* Brand */}
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-rayeva-emerald rounded-lg flex items-center justify-center rotate-3">
-              <span className="text-rayeva-lime font-bold">R</span>
+            <div className="w-7 h-7 md:w-8 md:h-8 bg-rayeva-emerald rounded-lg flex items-center justify-center rotate-3">
+              <span className="text-rayeva-lime font-bold text-sm md:text-base">R</span>
             </div>
-            <span className="text-xl font-display font-bold text-slate-900">Rayeva</span>
+            <span className="text-lg md:text-xl font-display font-bold text-slate-900">Rayeva</span>
           </div>
 
           <div className="hidden md:flex ml-10 gap-6">
@@ -122,12 +123,12 @@ export default function Home() {
           </div>
 
           {/* User Profile */}
-          <div className="ml-auto flex items-center gap-4">
+          <div className="ml-auto flex items-center gap-2 md:gap-4">
             <div className="hidden sm:flex flex-col items-end mr-2">
               <span className="text-[10px] font-bold uppercase tracking-wider text-rayeva-emerald/60">Professional Plan</span>
               <span className="text-xs font-semibold text-slate-400">Sustainable Goods Ltd.</span>
             </div>
-            <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-rayeva-emerald to-rayeva-forest flex items-center justify-center shadow-lg shadow-rayeva-emerald/20 text-white font-bold border border-white/20">
+            <div className="h-8 w-8 md:h-10 md:w-10 rounded-xl bg-gradient-to-br from-rayeva-emerald to-rayeva-forest flex items-center justify-center shadow-lg shadow-rayeva-emerald/20 text-white font-bold border border-white/20 text-xs md:text-base">
               SG
             </div>
           </div>
@@ -142,21 +143,43 @@ export default function Home() {
       />
 
       {/* ── Main Content ──────────────────────────────────────── */}
-      <main className="flex-1 pt-28 pb-12 px-6 lg:px-12 max-w-[1440px] mx-auto w-full page-fade-in">
+      <main className="flex-1 pt-24 md:pt-28 pb-12 px-4 md:px-6 lg:px-12 max-w-[1440px] mx-auto w-full page-fade-in">
 
         {/* Intro Section */}
-        <section className="mb-12 text-center max-w-2xl mx-auto">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-rayeva-lime/20 border border-rayeva-lime/30 text-rayeva-emerald text-[11px] font-bold uppercase tracking-widest mb-6 animate-float">
+        <section className="mb-8 md:mb-12 text-center max-w-2xl mx-auto">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-rayeva-lime/20 border border-rayeva-lime/30 text-rayeva-emerald text-[10px] md:text-[11px] font-bold uppercase tracking-widest mb-4 md:mb-6 animate-float">
             <span className="w-1.5 h-1.5 rounded-full bg-rayeva-emerald animate-pulse" />
             AI-Powered Transformation
           </div>
-          <h1 className="text-4xl md:text-5xl font-display font-bold text-slate-900 mb-4 leading-[1.1]">
+          <h1 className="text-3xl md:text-4xl lg:text-5xl font-display font-bold text-slate-900 mb-3 md:mb-4 leading-[1.1]">
             Create Proposals that <span className="bg-gradient-to-r from-rayeva-emerald to-rayeva-indigo bg-clip-text text-transparent italic">Matter.</span>
           </h1>
-          <p className="text-slate-500 text-lg">
+          <p className="text-slate-500 text-base md:text-lg px-2">
             Generating high-impact, sustainable product proposals in seconds with Rayeva's 2026 Pulse engine.
           </p>
         </section>
+
+        {/* Mobile Tab Switcher (Visible below 654px) */}
+        <div className="flex xl:hidden max-w-[654px] mx-auto mb-6 p-1 bg-slate-100/50 rounded-2xl gap-1 border border-slate-200/50">
+          <button
+            onClick={() => setActiveMobileTab('generator')}
+            className={`flex-1 py-3 rounded-xl text-xs font-bold uppercase tracking-widest transition-all duration-300 ${activeMobileTab === 'generator'
+              ? 'bg-white text-rayeva-emerald shadow-sm'
+              : 'text-slate-400 hover:text-slate-600'
+              }`}
+          >
+            Design Engine
+          </button>
+          <button
+            onClick={() => setActiveMobileTab('preview')}
+            className={`flex-1 py-3 rounded-xl text-xs font-bold uppercase tracking-widest transition-all duration-300 ${activeMobileTab === 'preview'
+              ? 'bg-white text-rayeva-emerald shadow-sm'
+              : 'text-slate-400 hover:text-slate-600'
+              }`}
+          >
+            Output Canvas {proposal && <span className="ml-1 w-2 h-2 rounded-full bg-rayeva-emerald inline-block animate-pulse" />}
+          </button>
+        </div>
 
         {/* Notifications */}
         <div className="max-w-4xl mx-auto mb-8">
@@ -172,9 +195,9 @@ export default function Home() {
 
         {generating && (
           <div className="fixed inset-0 z-[60] flex items-center justify-center bg-rayeva-sand/80 backdrop-blur-md">
-            <div className="text-center">
+            <div className="text-center px-4">
               <LoadingState />
-              <p className="mt-4 font-display font-medium text-rayeva-emerald animate-pulse">Designing your sustainable future...</p>
+              <p className="mt-4 font-display font-medium text-rayeva-emerald animate-pulse text-sm">Designing your sustainable future...</p>
             </div>
           </div>
         )}
@@ -183,7 +206,7 @@ export default function Home() {
         <div className="grid grid-cols-1 xl:grid-cols-12 gap-8 items-start">
 
           {/* Form Side - The Input engine */}
-          <div className="xl:col-span-5">
+          <div className={`${activeMobileTab === 'generator' ? 'block' : 'hidden'} xl:block xl:col-span-5 w-full`}>
             <div className="bento-card relative overflow-hidden group">
               <div className="absolute top-0 right-0 w-32 h-32 bg-rayeva-lime/10 rounded-full blur-3xl -mr-16 -mt-16 group-hover:bg-rayeva-lime/20 transition-all duration-700" />
               <div className="relative">
@@ -192,7 +215,11 @@ export default function Home() {
                   <span className="text-[10px] font-bold text-slate-400 border border-slate-100 px-2 py-0.5 rounded-full">v4.0.2</span>
                 </div>
                 <ProposalForm
-                  onSubmit={handleGenerate}
+                  onSubmit={(data) => {
+                    handleGenerate(data);
+                    // Auto-switch to preview on mobile when starting generation
+                    if (window.innerWidth < 654) setActiveMobileTab('preview');
+                  }}
                   loading={generating}
                   disabled={generating}
                 />
@@ -201,7 +228,7 @@ export default function Home() {
           </div>
 
           {/* Preview Side - The Output Canvas */}
-          <div className="xl:col-span-7">
+          <div className={`${activeMobileTab === 'preview' ? 'block' : 'hidden'} xl:block xl:col-span-7 w-full`}>
             {proposal ? (
               <div className="animate-fade-in h-full">
                 <ProposalPreview
@@ -213,26 +240,26 @@ export default function Home() {
                 />
               </div>
             ) : (
-              <div className="bento-card h-[600px] flex flex-col items-center justify-center text-center group border-dashed border-2 border-slate-200 bg-slate-50/50">
-                <div className="w-32 h-32 bg-white rounded-full flex items-center justify-center mb-8 shadow-xl shadow-slate-200/50 group-hover:scale-110 transition-transform duration-500">
-                  <svg className="w-16 h-16 text-rayeva-emerald/20 group-hover:text-rayeva-emerald/40 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="bento-card min-h-[400px] md:h-[600px] flex flex-col items-center justify-center text-center group border-dashed border-2 border-slate-200 bg-slate-50/50">
+                <div className="w-24 h-24 md:w-32 md:h-32 bg-white rounded-full flex items-center justify-center mb-6 md:mb-8 shadow-xl shadow-slate-200/50 group-hover:scale-110 transition-transform duration-500">
+                  <svg className="w-12 h-12 md:w-16 md:h-16 text-rayeva-emerald/20 group-hover:text-rayeva-emerald/40 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1}
                       d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
                   </svg>
                 </div>
-                <h3 className="text-2xl font-display font-bold text-slate-900 mb-3">Ready for Design</h3>
-                <p className="text-slate-500 max-w-sm mb-8">
+                <h3 className="text-xl md:text-2xl font-display font-bold text-slate-900 mb-3">Ready for Design</h3>
+                <p className="text-slate-500 max-w-sm mb-6 md:mb-8 text-sm md:text-base px-4">
                   Configure the engine on the left to generate your custom sustainability proposal.
                 </p>
-                <div className="flex gap-4">
-                  <div className="flex -space-x-3">
+                <div className="flex flex-col md:flex-row gap-4 px-4">
+                  <div className="flex -space-x-3 justify-center">
                     {[1, 2, 3, 4].map((i) => (
-                      <div key={i} className="w-8 h-8 rounded-full border-2 border-white bg-slate-200 overflow-hidden">
+                      <div key={i} className="w-7 h-7 md:w-8 md:h-8 rounded-full border-2 border-white bg-slate-200 overflow-hidden">
                         <img src={`https://i.pravatar.cc/32?img=${i + 10}`} alt="user" />
                       </div>
                     ))}
                   </div>
-                  <span className="text-xs text-slate-400 font-medium self-center">+120 teams using this engine</span>
+                  <span className="text-[10px] md:text-xs text-slate-400 font-medium self-center">+120 teams using this engine</span>
                 </div>
               </div>
             )}
@@ -242,11 +269,11 @@ export default function Home() {
         {/* Feature Bento Grid */}
         {!proposal && !generating && (
           <div className="mt-20 grid grid-cols-1 md:grid-cols-12 gap-6">
-            <div className="md:col-span-4 bento-card bg-rayeva-emerald text-white group cursor-pointer overflow-hidden relative">
-              <div className="absolute top-0 right-0 w-40 h-40 bg-white/10 rounded-full -mr-20 -mt-20 blur-2xl group-hover:scale-150 transition-transform duration-700" />
-              <div className="text-4xl mb-6">🌱</div>
-              <h3 className="text-xl font-display font-bold mb-2">Sustainable Core</h3>
-              <p className="text-emerald-50/80 text-sm">Verified eco-credentials for every product in our 2026 catalog.</p>
+            <div className="md:col-span-4 bento-card bg-white hover:bg-white/80 group cursor-pointer overflow-hidden relative transition-all">
+              <div className="absolute top-0 right-0 w-40 h-40 bg-rayeva-emerald/5 rounded-full -mr-20 -mt-20 blur-2xl group-hover:scale-150 transition-transform duration-700" />
+              <div className="text-4xl mb-6 relative">🌱</div>
+              <h3 className="text-xl font-display font-bold text-slate-900 mb-2 relative">Sustainable Core</h3>
+              <p className="text-slate-500 text-sm relative">Verified eco-credentials for every product in our 2026 catalog.</p>
             </div>
             <div className="md:col-span-4 bento-card hover:bg-white group cursor-pointer transition-all">
               <div className="text-4xl mb-6">📊</div>

@@ -41,25 +41,27 @@ export default function ProposalPreview({
   ];
 
   return (
-    <div className="glass-card rounded-[32px] overflow-hidden border-none shadow-2xl flex flex-col h-[850px]">
+    <div className="glass-card rounded-[24px] md:rounded-[32px] overflow-hidden border-none shadow-2xl flex flex-col h-[650px] md:h-[850px]">
       {/* Premium Header */}
-      <div className="p-8 pb-4 relative overflow-hidden">
+      <div className="p-5 md:p-8 pb-3 md:pb-4 relative overflow-hidden">
         <div className="absolute top-0 right-0 w-64 h-64 bg-rayeva-lime/10 rounded-full blur-[100px] -mr-32 -mt-32" />
 
-        <div className="relative flex justify-between items-start">
-          <div>
+        <div className="relative flex flex-col xs:flex-row justify-between items-start gap-4">
+          <div className="w-full xs:w-auto">
             <div className="flex items-center gap-2 mb-2">
               <span className="w-2 h-2 rounded-full bg-rayeva-emerald animate-pulse" />
               <span className="text-[10px] font-bold uppercase tracking-widest text-rayeva-emerald">Draft Proposal</span>
             </div>
-            <h2 className="text-3xl font-display font-bold text-slate-900 leading-tight">
+            <h2 className="text-xl md:text-3xl font-display font-bold text-slate-900 leading-tight break-words">
               {proposal.clientName}
             </h2>
-            <p className="text-slate-400 text-sm mt-1 font-medium">{proposal.sustainabilityGoals.substring(0, 60)}...</p>
+            <p className="text-slate-400 text-xs md:text-sm mt-1 font-medium line-clamp-2 md:line-clamp-none">
+              {proposal.sustainabilityGoals.substring(0, 60)}...
+            </p>
           </div>
-          <div className="text-right">
-            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-1">Total Allotment</p>
-            <p className="text-3xl font-display font-bold text-rayeva-emerald">
+          <div className="text-left xs:text-right shrink-0 border-t xs:border-t-0 border-slate-100 pt-3 xs:pt-0 w-full xs:w-auto">
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-1">Total Budget</p>
+            <p className="text-2xl md:text-3xl font-display font-bold text-rayeva-emerald">
               {formatCurrency(proposal.totalBudget)}
             </p>
           </div>
@@ -67,26 +69,26 @@ export default function ProposalPreview({
       </div>
 
       {/* Sophisticated Tabs */}
-      <div className="px-8 mb-4">
-        <div className="flex bg-slate-100/50 p-1.5 rounded-2xl gap-1">
+      <div className="px-5 md:px-8 mb-4">
+        <div className="flex bg-slate-100/50 p-1 rounded-2xl gap-0.5 md:gap-1">
           {tabs.map((tab) => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl text-xs font-bold transition-all duration-300 ${activeTab === tab.id
+              className={`flex-1 flex flex-col items-center justify-center gap-1 py-1.5 md:py-2.5 rounded-xl text-[9px] md:text-xs font-bold transition-all duration-300 ${activeTab === tab.id
                 ? 'bg-white text-rayeva-emerald shadow-sm'
                 : 'text-slate-500 hover:text-slate-700 hover:bg-white/50'
                 }`}
             >
-              <span className="opacity-70 text-base">{tab.icon}</span>
-              {tab.label}
+              <span className="opacity-70 text-sm md:text-base mb-0.5">{tab.icon}</span>
+              <span className="uppercase tracking-tighter">{tab.label}</span>
             </button>
           ))}
         </div>
       </div>
 
       {/* Content Canvas */}
-      <div className="flex-1 px-8 py-4 overflow-y-auto custom-scrollbar">
+      <div className="flex-1 px-5 md:px-8 py-3 md:py-4 overflow-y-auto custom-scrollbar">
         <div className="animate-fade-in">
           {activeTab === 'overview' && (
             <OverviewTab proposal={proposal} formatCurrency={formatCurrency} />
@@ -102,12 +104,12 @@ export default function ProposalPreview({
       </div>
 
       {/* Premium Action Bar */}
-      <div className="p-8 pt-4 bg-slate-50/50 border-t border-slate-100">
+      <div className="p-5 md:p-8 pt-3 md:pt-4 bg-slate-50/50 border-t border-slate-100">
         <div className="flex flex-col sm:flex-row gap-4">
           <button
             onClick={onSave}
             disabled={saving || saved}
-            className={`flex-[2] h-14 rounded-2xl font-bold uppercase tracking-widest text-xs transition-all flex items-center justify-center gap-3 glow-on-hover ${saved
+            className={`flex-[2] sm:flex-[2] h-14 rounded-2xl font-bold uppercase tracking-widest text-xs transition-all flex items-center justify-center gap-3 glow-on-hover px-4 ${saved
               ? 'bg-rayeva-emerald text-white'
               : 'bg-rayeva-emerald text-white hover:shadow-xl hover:shadow-rayeva-emerald/20 disabled:bg-slate-300'
               }`}
@@ -119,14 +121,14 @@ export default function ProposalPreview({
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
                 </svg>
-                <span>Synchronized</span>
+                <span className="hidden sm:inline">Synchronized</span>
               </>
             ) : (
               <>
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 7v10c0 1.1.9 2 2 2h12a2 2 0 002-2V7M4 7c0-1.1.9-2 2-2h12a2 2 0 012 2M4 7c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2M9 12h6m-6 3h6" />
                 </svg>
-                <span>Secure to Cloud</span>
+                <span className="hidden sm:inline">Secure to Cloud</span>
               </>
             )}
           </button>
@@ -134,7 +136,7 @@ export default function ProposalPreview({
           <button
             onClick={handleExportPDF}
             disabled={exporting}
-            className="flex-1 h-14 rounded-2xl font-bold uppercase tracking-widest text-xs bg-slate-900 text-white hover:bg-slate-800 transition-all flex items-center justify-center gap-3 disabled:bg-slate-300 shadow-xl shadow-slate-900/10"
+            className="flex-1 h-14 rounded-2xl font-bold uppercase tracking-widest text-xs bg-slate-900 text-white hover:bg-slate-800 transition-all flex items-center justify-center gap-3 disabled:bg-slate-300 shadow-xl shadow-slate-900/10 px-4"
           >
             {exporting ? (
               <div className="loader-export" />
@@ -143,7 +145,7 @@ export default function ProposalPreview({
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                 </svg>
-                <span>Export</span>
+                <span className="hidden sm:inline">Export</span>
               </>
             )}
           </button>
@@ -160,13 +162,11 @@ export default function ProposalPreview({
           </button>
         </div>
 
-        {proposal.timeline && (
-          <div className="mt-6 flex justify-center items-center gap-2">
-            <span className="text-[10px] font-bold uppercase tracking-widest text-slate-300">Target Delivery</span>
-            <div className="h-px w-8 bg-slate-100" />
-            <span className="text-xs font-bold text-slate-500 uppercase">{proposal.timeline}</span>
-          </div>
-        )}
+        <div className="mt-6 flex justify-center items-center gap-2">
+          <span className="text-[10px] font-bold uppercase tracking-widest text-slate-300">Estimated Delivery</span>
+          <div className="h-px w-8 bg-slate-100" />
+          <span className="text-xs font-bold text-slate-500 uppercase">{proposal.timeline}</span>
+        </div>
       </div>
     </div>
   );
@@ -179,41 +179,41 @@ function OverviewTab({ proposal, formatCurrency }) {
   );
 
   return (
-    <div className="space-y-8 py-4">
+    <div className="space-y-6 md:space-y-8 py-2 md:py-4">
       {/* Dynamic Statistics */}
-      <div className="grid grid-cols-2 gap-6">
-        <div className="p-6 rounded-3xl bg-rayeva-lime/10 border border-rayeva-lime/20 group hover:scale-[1.02] transition-transform">
-          <p className="text-4xl font-display font-bold text-rayeva-emerald mb-1">
+      <div className="grid grid-cols-1 xxs:grid-cols-2 gap-4 md:gap-6">
+        <div className="p-4 md:p-6 rounded-2xl md:rounded-3xl bg-rayeva-lime/10 border border-rayeva-lime/20 group hover:scale-[1.02] transition-transform">
+          <p className="text-3xl md:text-4xl font-display font-bold text-rayeva-emerald mb-1">
             {proposal.productMix?.length || 0}
           </p>
-          <p className="text-[11px] font-bold uppercase tracking-widest text-rayeva-emerald/60">Key Clusters</p>
+          <p className="text-[10px] md:text-[11px] font-bold uppercase tracking-widest text-rayeva-emerald/60">Product Categories</p>
         </div>
-        <div className="p-6 rounded-3xl bg-indigo-50 border border-indigo-100 group hover:scale-[1.02] transition-transform">
-          <p className="text-4xl font-display font-bold text-indigo-600 mb-1">
+        <div className="p-4 md:p-6 rounded-2xl md:rounded-3xl bg-indigo-50 border border-indigo-100 group hover:scale-[1.02] transition-transform">
+          <p className="text-3xl md:text-4xl font-display font-bold text-indigo-600 mb-1">
             {totalProducts}
           </p>
-          <p className="text-[11px] font-bold uppercase tracking-widest text-indigo-400">Total Asset Mix</p>
+          <p className="text-[10px] md:text-[11px] font-bold uppercase tracking-widest text-indigo-400">Total Items</p>
         </div>
       </div>
 
       {/* Sustainable Vision */}
-      <div className="space-y-3">
-        <h4 className="text-[11px] font-bold uppercase tracking-[0.2em] text-slate-400">Sustainable Vision</h4>
-        <div className="p-6 rounded-3xl bg-white border border-slate-100 shadow-sm relative overflow-hidden group">
+      <div className="space-y-2 md:space-y-3">
+        <h4 className="text-[10px] md:text-[11px] font-bold uppercase tracking-[0.2em] text-slate-400">Project Goals</h4>
+        <div className="p-4 md:p-6 rounded-2xl md:rounded-3xl bg-white border border-slate-100 shadow-sm relative overflow-hidden group">
           <div className="absolute top-0 left-0 w-1 h-full bg-rayeva-emerald opacity-20 group-hover:opacity-100 transition-opacity" />
-          <p className="text-slate-600 font-medium leading-relaxed italic text-lg">"{proposal.sustainabilityGoals}"</p>
+          <p className="text-slate-600 font-medium leading-relaxed italic text-base md:text-lg">"{proposal.sustainabilityGoals}"</p>
         </div>
       </div>
 
       {/* Value Proposition */}
       {proposal.impactPositioningSummary?.keyMessage && (
-        <div className="space-y-3">
-          <h4 className="text-[11px] font-bold uppercase tracking-[0.2em] text-slate-400">Strategic Positioning</h4>
-          <div className="p-6 rounded-3xl bg-gradient-to-br from-slate-900 to-slate-800 text-white shadow-xl relative group overflow-hidden">
+        <div className="space-y-2 md:space-y-3">
+          <h4 className="text-[10px] md:text-[11px] font-bold uppercase tracking-[0.2em] text-slate-400">Executive Summary</h4>
+          <div className="p-4 md:p-6 rounded-2xl md:rounded-3xl bg-gradient-to-br from-slate-900 to-slate-800 text-white shadow-xl relative group overflow-hidden">
             <div className="absolute bottom-0 right-0 w-32 h-32 bg-rayeva-lime/10 rounded-full blur-3xl" />
-            <div className="flex gap-4 items-start relative overflow-hidden">
-              <span className="text-2xl mt-1">✨</span>
-              <p className="text-sm font-medium leading-relaxed text-slate-200">
+            <div className="flex gap-3 md:gap-4 items-start relative overflow-hidden">
+              <span className="text-xl md:text-2xl mt-1">✨</span>
+              <p className="text-xs md:text-sm font-medium leading-relaxed text-slate-200">
                 {proposal.impactPositioningSummary.keyMessage}
               </p>
             </div>
@@ -226,7 +226,7 @@ function OverviewTab({ proposal, formatCurrency }) {
 
 function ProductsTab({ proposal, formatCurrency }) {
   return (
-    <div className="space-y-8 py-4">
+    <div className="space-y-6 md:space-y-8 py-2 md:py-4">
       {proposal.productMix?.map((category, catIndex) => (
         <div key={catIndex} className="space-y-4">
           <div className="flex items-center gap-4">
@@ -235,10 +235,10 @@ function ProductsTab({ proposal, formatCurrency }) {
           </div>
           <div className="grid gap-4">
             {category.products?.map((product, prodIndex) => (
-              <div key={prodIndex} className="p-5 bg-white border border-slate-100 rounded-3xl hover:border-rayeva-emerald/20 hover:shadow-xl hover:shadow-slate-200/50 transition-all group">
-                <div className="flex justify-between items-start gap-4">
+              <div key={prodIndex} className="p-4 md:p-5 bg-white border border-slate-100 rounded-2xl md:rounded-3xl hover:border-rayeva-emerald/20 hover:shadow-xl hover:shadow-slate-200/50 transition-all group">
+                <div className="flex flex-col xs:flex-row justify-between items-start gap-4">
                   <div className="flex-1">
-                    <h5 className="font-display font-bold text-slate-900 text-lg group-hover:text-rayeva-emerald transition-colors">{product.name}</h5>
+                    <h5 className="font-display font-bold text-slate-900 text-base md:text-lg group-hover:text-rayeva-emerald transition-colors break-words">{product.name}</h5>
                     <p className="text-xs text-slate-500 mt-2 leading-relaxed">
                       {product.description}
                     </p>
@@ -251,11 +251,11 @@ function ProductsTab({ proposal, formatCurrency }) {
                       </span>
                     </div>
                   </div>
-                  <div className="text-right shrink-0">
-                    <p className="text-lg font-display font-bold text-slate-900">
+                  <div className="text-left xs:text-right shrink-0">
+                    <p className="text-base md:text-lg font-display font-bold text-slate-900">
                       {formatCurrency(product.totalPrice)}
                     </p>
-                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">
+                    <p className="text-[9px] md:text-[10px] font-bold text-slate-400 uppercase tracking-tighter">
                       {formatCurrency(product.unitPrice)} / Unit
                     </p>
                   </div>
@@ -276,27 +276,27 @@ function BudgetTab({ proposal, formatCurrency }) {
   );
 
   return (
-    <div className="space-y-10 py-4">
+    <div className="space-y-6 md:space-y-10 py-2 md:py-4">
       {/* Fiscal Matrix */}
-      <div className="p-8 rounded-[40px] bg-slate-900 text-white relative overflow-hidden shadow-2xl">
+      <div className="p-5 md:p-8 rounded-[24px] md:rounded-[40px] bg-slate-900 text-white relative overflow-hidden shadow-2xl">
         <div className="absolute top-0 right-0 w-64 h-64 bg-rayeva-emerald opacity-20 blur-[100px]" />
 
-        <div className="grid grid-cols-2 gap-12 relative overflow-hidden">
+        <div className="grid grid-cols-2 gap-4 md:gap-12 relative overflow-hidden">
           <div>
-            <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400 mb-2">Portfolio Cap</p>
-            <p className="text-3xl font-display font-bold">{formatCurrency(proposal.totalBudget)}</p>
+            <p className="text-[9px] md:text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400 mb-1">Total Budget</p>
+            <p className="text-base xxs:text-xl md:text-3xl font-display font-bold">{formatCurrency(proposal.totalBudget)}</p>
           </div>
-          <div>
-            <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400 mb-2">Operational Float</p>
-            <p className="text-3xl font-display font-bold text-rayeva-lime">
+          <div className="text-right">
+            <p className="text-[9px] md:text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400 mb-1">Available Funds</p>
+            <p className="text-base xxs:text-xl md:text-3xl font-display font-bold text-rayeva-lime">
               {formatCurrency(proposal.totalBudget - totalAllocated)}
             </p>
           </div>
         </div>
 
-        <div className="mt-10 space-y-2">
-          <div className="flex justify-between text-[11px] font-bold uppercase tracking-widest">
-            <span>Execution Velocity</span>
+        <div className="mt-6 md:mt-10 space-y-2">
+          <div className="flex justify-between text-[9px] md:text-[11px] font-bold uppercase tracking-widest">
+            <span>Budget Allocation Progress</span>
             <span className="text-rayeva-lime">{Math.round((totalAllocated / proposal.totalBudget) * 100)}% Usage</span>
           </div>
           <div className="h-1.5 w-full bg-slate-800 rounded-full overflow-hidden">
@@ -309,9 +309,9 @@ function BudgetTab({ proposal, formatCurrency }) {
       </div>
 
       {/* Categorical Breakdown */}
-      <div className="space-y-6">
-        <h4 className="text-[11px] font-bold uppercase tracking-[0.2em] text-slate-400">Asset Allocation</h4>
-        <div className="space-y-6">
+      <div className="space-y-4 md:space-y-6">
+        <h4 className="text-[10px] md:text-[11px] font-bold uppercase tracking-[0.2em] text-slate-400">Budget Breakdown</h4>
+        <div className="space-y-4 md:space-y-6">
           {proposal.costBreakdown?.map((item, index) => (
             <div key={index} className="group">
               <div className="flex justify-between items-end mb-3">
@@ -334,6 +334,22 @@ function BudgetTab({ proposal, formatCurrency }) {
             </div>
           ))}
         </div>
+
+        {/* Total Allocated Summary */}
+        <div className="pt-6 border-t border-slate-100 flex justify-between items-center group">
+          <div>
+            <span className="text-sm font-bold text-slate-900 group-hover:text-rayeva-emerald transition-colors">
+              Total Budget Used
+            </span>
+            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-tight mt-0.5">Final Execution Sum</p>
+          </div>
+          <div className="text-right">
+            <span className="text-lg font-display font-bold text-slate-900">
+              {formatCurrency(totalAllocated)}
+            </span>
+            <p className="text-[9px] font-bold text-slate-400 uppercase tracking-tighter">Budget Utilization</p>
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -354,36 +370,36 @@ function ImpactTab({ proposal }) {
   }
 
   const impactMetrics = [
-    { label: 'Plastic Prevention', value: impact.plasticSavedKg, unit: 'KG', icon: '♻️', style: 'bg-white border-slate-100' },
-    { label: 'Cloud Carbon Offset', value: impact.carbonOffsetKg, unit: 'CO2e', icon: '☁️', style: 'bg-white border-slate-100' },
-    { label: 'Regenerative Equivalent', value: impact.treesEquivalent, unit: 'TREES', icon: '🌿', style: 'bg-white border-slate-100' },
-    { label: 'Reserves Preserved', value: impact.waterSavedLiters, unit: 'LITERS', icon: '💧', style: 'bg-white border-slate-100' },
+    { label: 'Plastic Saved', value: impact.plasticSavedKg, unit: 'KG', icon: '♻️', style: 'bg-white border-slate-100' },
+    { label: 'Carbon Offset', value: impact.carbonOffsetKg, unit: 'CO2e', icon: '☁️', style: 'bg-white border-slate-100' },
+    { label: 'Trees Equiv.', value: impact.treesEquivalent, unit: '🌿', icon: '', style: 'bg-white border-slate-100' },
+    { label: 'Water Saved', value: impact.waterSavedLiters, unit: 'L', icon: '💧', style: 'bg-white border-slate-100' },
   ];
 
   return (
-    <div className="space-y-10 py-4">
+    <div className="space-y-6 md:space-y-10 py-2 md:py-4">
       {/* Metrics Hex-Grid */}
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-2 gap-3 md:gap-4">
         {impactMetrics.map((metric, index) => metric.value && (
-          <div key={index} className={`p-6 rounded-[32px] border ${metric.style} shadow-sm group hover:-translate-y-1 transition-all duration-300`}>
-            <span className="text-2xl mb-4 block filter grayscale group-hover:grayscale-0 transition-all">{metric.icon}</span>
-            <div className="flex items-baseline gap-1 mb-1">
-              <span className="text-3xl font-display font-bold text-slate-900">
-                {metric.value.toLocaleString()}
+          <div key={index} className={`p-3 xxs:p-4 md:p-6 rounded-2xl md:rounded-[32px] border ${metric.style} shadow-sm group hover:-translate-y-1 transition-all duration-300`}>
+            {metric.icon && <span className="text-base md:text-2xl mb-1 md:mb-4 block filter grayscale group-hover:grayscale-0 transition-all">{metric.icon}</span>}
+            <div className="flex flex-col items-baseline gap-0.5 mb-1">
+              <span className="text-sm xxs:text-xl md:text-3xl font-display font-bold text-slate-900 truncate w-full">
+                {metric.value > 1000 ? `${(metric.value / 1000).toFixed(1)}k` : metric.value.toLocaleString()}
               </span>
-              <span className="text-[10px] font-bold text-slate-400">{metric.unit}</span>
+              <span className="text-[8px] md:text-[10px] font-bold text-slate-400">{metric.unit}</span>
             </div>
-            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest leading-tight">{metric.label}</p>
+            <p className="text-[8px] md:text-[10px] font-bold text-slate-400 uppercase tracking-tight leading-tight line-clamp-2">{metric.label}</p>
           </div>
         ))}
       </div>
 
       {/* Narrative Position */}
       {impact.keyMessage && (
-        <div className="p-8 rounded-[40px] bg-rayeva-emerald text-white relative overflow-hidden group">
+        <div className="p-6 md:p-8 rounded-[30px] md:rounded-[40px] bg-rayeva-emerald text-white relative overflow-hidden group">
           <div className="absolute top-0 right-0 w-32 h-32 bg-rayeva-lime/20 rounded-full blur-[60px]" />
-          <h4 className="text-[11px] font-bold uppercase tracking-[0.3em] text-rayeva-lime mb-4">Pulse Environmental Statement</h4>
-          <p className="text-lg font-medium leading-relaxed italic opacity-90 group-hover:opacity-100 transition-opacity">
+          <h4 className="text-[10px] md:text-[11px] font-bold uppercase tracking-[0.3em] text-rayeva-lime mb-3 md:mb-4">Pulse Environmental Statement</h4>
+          <p className="text-base md:text-lg font-medium leading-relaxed italic opacity-90 group-hover:opacity-100 transition-opacity">
             "{impact.keyMessage}"
           </p>
         </div>

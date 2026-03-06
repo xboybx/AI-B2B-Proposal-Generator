@@ -48,7 +48,11 @@ module.exports = {
           '0%, 100%': { transform: 'translateY(0px)' },
           '50%': { transform: 'translateY(-10px)' },
         }
-      }
+      },
+      screens: {
+        'xxs': '340px',
+        'xs': '480px',
+      },
     },
   },
   plugins: [],
