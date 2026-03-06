@@ -211,9 +211,7 @@ npm start
 }
 ```
 
-## Configuration
-
-### AI Model Configuration
+## AI Model Configuration
 
 The application is configured to use OpenRouter.ai to access state-of-the-art Reasoning models. To change the model, edit `src/services/openaiService.js`:
 
@@ -278,14 +276,7 @@ Proposals are stored in `src/data/proposals.json`. To use MongoDB instead:
 - The application uses server-side API routes to protect API keys
 - Input validation is performed on both client and server
 
-## License
-
-MIT License - See LICENSE file for details
-
-## Support
-
-For issues or questions, please contact the development team or create an issue in the project repository.
 
 ---
 
-**Built with ❤️ for Rayeva Sustainable Commerce Platform**
+**This is a POC task developed by Jeswanth**

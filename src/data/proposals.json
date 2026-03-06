@@ -385,5 +385,174 @@
     "createdAt": "2026-03-04T17:55:22.430Z",
     "updatedAt": "2026-03-04T17:55:22.430Z",
     "status": "draft"
+  },
+  {
+    "id": "PROP-1772785477689-lkuhsqqsr",
+    "clientName": "TechCorp Solutions",
+    "totalBudget": 500,
+    "sustainabilityGoals": "Reduce plastic waste by 50% through sustainable supply chain optimization",
+    "productMix": [
+      {
+        "category": "OfficeSupplies",
+        "products": [
+          {
+            "name": "Reusable Notebooks",
+            "description": "Durable eco-friendly writing tools",
+            "quantity": 10,
+            "unitPrice": 5,
+            "totalPrice": 50,
+            "sustainabilityFeature": "Reduces paper waste"
+          }
+        ]
+      },
+      {
+        "category": "PackagingMaterials",
+        "products": [
+          {
+            "name": "Biodegradable Containers",
+            "description": "Compostable packaging for shipping",
+            "quantity": 5,
+            "unitPrice": 20,
+            "totalPrice": 100,
+            "sustainabilityFeature": "Reduces plastic use"
+          }
+        ]
+      },
+      {
+        "category": "CorporateGifts",
+        "products": [
+          {
+            "name": "Reusable Water Bottles",
+            "description": "Durable hydration accessories",
+            "quantity": 3,
+            "unitPrice": 10,
+            "totalPrice": 30,
+            "sustainabilityFeature": "Minimizes single-use plastics"
+          }
+        ]
+      }
+    ],
+    "budgetAllocation": {
+      "officeSupplies": 100,
+      "packagingMaterials": 150,
+      "corporateGifts": 100,
+      "other": 50
+    },
+    "costBreakdown": [
+      {
+        "category": "OfficeSupplies",
+        "allocatedAmount": 100,
+        "percentageOfBudget": 20
+      }
+    ],
+    "impactPositioningSummary": {
+      "plasticSavedKg": 75,
+      "carbonOffsetKg": 30,
+      "treesEquivalent": 15,
+      "waterSavedLiters": 200,
+      "keyMessage": "TechCorp Solutions can achieve a 50% reduction in plastic waste through sustainable office practices, enhancing environmental impact while boosting corporate social responsibility metrics."
+    },
+    "timeline": "Q3 2024",
+    "notes": "Implementation aligns with 2025 sustainability targets and supports long-term cost savings.",
+    "createdAt": "2026-03-06T08:24:37.689Z",
+    "updatedAt": "2026-03-06T08:24:37.689Z",
+    "status": "draft"
+  },
+  {
+    "id": "PROP-1772786469256-qqgux25kq",
+    "clientName": "TechCorp Solutions",
+    "totalBudget": 1000,
+    "sustainabilityGoals": "Reduce plastic waste by 50% through sustainable alternatives",
+    "productMix": [
+      {
+        "category": "Office Supplies",
+        "products": [
+          {
+            "name": "Reusable Notebooks",
+            "description": "Durable paper-based notebooks",
+            "quantity": 10,
+            "unitPrice": 5,
+            "totalPrice": 50,
+            "sustainabilityFeature": "Reduces single-use plastic"
+          },
+          {
+            "name": "Biodegradable Pens",
+            "description": "Plant-based pencils with bamboo handles",
+            "quantity": 5,
+            "unitPrice": 3,
+            "totalPrice": 15,
+            "sustainabilityFeature": "Eliminates plastic waste"
+          }
+        ]
+      },
+      {
+        "category": "Packaging Materials",
+        "products": [
+          {
+            "name": "Compostable Cups",
+            "description": "Biodegradable cup sets for events",
+            "quantity": 20,
+            "unitPrice": 10,
+            "totalPrice": 200,
+            "sustainabilityFeature": "Decomposes naturally"
+          },
+          {
+            "name": "Wax Seals",
+            "description": "Reusable adhesive seal tubes",
+            "quantity": 5,
+            "unitPrice": 15,
+            "totalPrice": 75,
+            "sustainabilityFeature": "Minimizes plastic wrapping"
+          }
+        ]
+      },
+      {
+        "category": "Corporate Gifts",
+        "products": [
+          {
+            "name": "Reusable Water Bottles",
+            "description": "Insulated stainless steel bottles",
+            "quantity": 20,
+            "unitPrice": 20,
+            "totalPrice": 400,
+            "sustainabilityFeature": "Reduces single-use plastic consumption"
+          }
+        ]
+      }
+    ],
+    "budgetAllocation": {
+      "officeSupplies": 65,
+      "packagingMaterials": 275,
+      "corporateGifts": 400
+    },
+    "costBreakdown": [
+      {
+        "category": "Office Supplies",
+        "allocatedAmount": 65,
+        "percentageOfBudget": 6.5
+      },
+      {
+        "category": "Packaging Materials",
+        "allocatedAmount": 275,
+        "percentageOfBudget": 27.5
+      },
+      {
+        "category": "Corporate Gifts",
+        "allocatedAmount": 400,
+        "percentageOfBudget": 40
+      }
+    ],
+    "impactPositioningSummary": {
+      "plasticSavedKg": 150,
+      "carbonOffsetKg": 30,
+      "treesEquivalent": 25,
+      "waterSavedLiters": 1200,
+      "keyMessage": "TechCorp Solutions can achieve a 50% reduction in plastic waste by adopting these sustainable solutions, eliminating single-use items while enhancing operational efficiency and aligning with environmental responsibility. Implementing these initiatives will position TechCorp as a leader in reducing its ecological footprint and fostering long-term resilience."
+    },
+    "timeline": "12 months",
+    "notes": "Immediate implementation ensures measurable impact within six months.",
+    "createdAt": "2026-03-06T08:41:09.256Z",
+    "updatedAt": "2026-03-06T08:41:09.256Z",
+    "status": "draft"
   }
 ]

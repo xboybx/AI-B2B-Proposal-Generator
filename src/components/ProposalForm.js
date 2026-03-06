@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 export default function ProposalForm({ onSubmit, loading, disabled }) {
   const [formData, setFormData] = useState({
@@ -8,6 +8,14 @@ export default function ProposalForm({ onSubmit, loading, disabled }) {
     totalBudget: '',
     sustainabilityGoals: '',
   });
+
+  const [rows, setRows] = useState(4);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined' && window.innerWidth < 350) {
+      setRows(3);
+    }
+  }, []);
 
   const [errors, setErrors] = useState({});
 
@@ -148,7 +156,7 @@ export default function ProposalForm({ onSubmit, loading, disabled }) {
             value={formData.sustainabilityGoals}
             onChange={handleChange}
             placeholder="Describe the desired environmental impact..."
-            rows={window.innerWidth < 350 ? 3 : 4}
+            rows={rows}
             disabled={disabled}
             className={`premium-input resize-none text-sm ${errors.sustainabilityGoals ? 'border-red-300 bg-red-50/30' : ''}`}
           />
