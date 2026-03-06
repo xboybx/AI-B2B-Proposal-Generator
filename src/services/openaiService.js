@@ -66,8 +66,9 @@ RULES:
 1. Total prices sum MUST NOT exceed budget.
 2. 3-4 categories, 2-3 products each.
 3. Impact metrics must be realistic counts.
-4. The 'keyMessage' must be a persuasive, professional 2-3 sentence executive summary that explains how the recommended products solve the client's specific sustainability challenges.
-5. Output RAW JSON ONLY. No markdown, no 'think' tags in output.`;
+4. The 'keyMessage' must be a persuasive, professional 2-3 sentence executive summary.
+5. Output RAW JSON ONLY. No markdown, no 'think' tags.
+6. CRITICAL: NEVER use placeholders like "..." or "[remaining products]" in arrays. EVERY product and array element must be a full, valid object.`;
 
 /**
  * Generate a B2B proposal using OpenAI
@@ -82,12 +83,12 @@ export async function generateProposal({ clientName, totalBudget, sustainability
 Client: ${clientName}
 Budget: $${totalBudget} USD
 Goals: ${sustainabilityGoals}
-Provide a comprehensive proposal with product recommendations and impact metrics.`;
+Provide a comprehensive proposal with product recommendations and impact metrics. Do not summarize; provide all data points in full.`;
 
     logger.logPrompt({
       systemPrompt: SYSTEM_PROMPT,
       userPrompt,
-      model: 'liquid/lfm-2.5-1.2b-thinking:free',
+      model: 'sourceful/riverflow-v2-pro',
       timestamp: new Date().toISOString(),
     });
 
@@ -99,13 +100,14 @@ Provide a comprehensive proposal with product recommendations and impact metrics
     for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
       try {
         const response = await openai.chat.completions.create({
-          model: 'liquid/lfm-2.5-1.2b-thinking:free',
+          model: 'sourceful/riverflow-v2-pro',
           messages: [
             { role: 'system', content: SYSTEM_PROMPT },
             { role: 'user', content: userPrompt },
           ],
-          temperature: 0.7,
-          max_tokens: 4000
+          temperature: 0.1, // Near-zero temperature for strict JSON adherence
+          max_tokens: 4000,
+          response_format: { type: 'json_object' } // Force JSON mode
         });
 
         const choice = response.choices[0];
@@ -178,7 +180,7 @@ Provide a comprehensive proposal with product recommendations and impact metrics
 export async function testConnection() {
   try {
     const response = await openai.chat.completions.create({
-      model: 'liquid/lfm-2.5-1.2b-thinking:free',
+      model: 'sourceful/riverflow-v2-pro',
       messages: [{ role: 'user', content: 'Hello' }],
       max_tokens: 10,
     });

@@ -228,3 +228,31 @@
 .custom-scrollbar::-webkit-scrollbar {
   width: 4px;
 }
+
+/* 10-second Interval Blink Animation */
+@keyframes blink-alert {
+
+  0%,
+  90%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  92%,
+  96% {
+    opacity: 0.5;
+    transform: scale(1.15);
+    filter: brightness(1.2);
+  }
+
+  94%,
+  98% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-blink-10s {
+  animation: blink-alert 10s infinite;
+}

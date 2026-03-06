@@ -109,10 +109,17 @@ export default function SavedProposalsSidebar({ isOpen, onSelectProposal, active
                     savedProposals.map((p) => {
                         const isActive = p.id === activeProposalId;
                         return (
-                            <button
+                            <div
                                 key={p.id}
+                                role="button"
+                                tabIndex={0}
                                 onClick={() => onSelectProposal(p)}
-                                className={`w-full text-left p-4 rounded-2xl transition-all border group relative overflow-hidden ${isActive
+                                onKeyDown={(e) => {
+                                    if (e.key === 'Enter' || e.key === ' ') {
+                                        onSelectProposal(p);
+                                    }
+                                }}
+                                className={`w-full text-left p-4 rounded-2xl transition-all border group relative overflow-hidden cursor-pointer ${isActive
                                     ? 'bg-white border-rayeva-emerald/20 shadow-lg shadow-rayeva-emerald/5 ring-1 ring-rayeva-emerald/5'
                                     : 'bg-white/30 border-slate-100 hover:bg-white hover:border-rayeva-emerald/20'
                                     }`}
@@ -138,7 +145,7 @@ export default function SavedProposalsSidebar({ isOpen, onSelectProposal, active
                                         {formatDate(p.createdAt || p.savedAt || p.generatedAt)}
                                     </p>
                                 </div>
-                            </button>
+                            </div>
                         );
                     })
                 )}

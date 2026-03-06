@@ -7,6 +7,7 @@ import LoadingState from '@/components/LoadingState';
 import ErrorState from '@/components/ErrorState';
 import SuccessNotification from '@/components/SuccessNotification';
 import SavedProposalsSidebar from '@/components/SavedProposalsSidebar';
+import AIPulseInfo from '@/components/AIPulseInfo';
 
 export default function Home() {
   const [proposal, setProposal] = useState(null);
@@ -134,6 +135,9 @@ export default function Home() {
           </div>
         </div>
       </header>
+
+      {/* ── AI Info Icon ────────────────────────────────────────── */}
+      <AIPulseInfo />
 
       {/* ── Sidebar ───────────────────────────────────────────── */}
       <SavedProposalsSidebar
