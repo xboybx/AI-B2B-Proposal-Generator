@@ -4,9 +4,13 @@ import path from 'path';
 const LOGS_DIR = path.join(process.cwd(), 'logs');
 const LOG_FILE = path.join(LOGS_DIR, 'ai-interactions.log');
 
-// Ensure logs directory exists
-if (!fs.existsSync(LOGS_DIR)) {
-  fs.mkdirSync(LOGS_DIR, { recursive: true });
+// Ensure logs directory exists (optional, catch error for read-only filesystems)
+try {
+  if (!fs.existsSync(LOGS_DIR)) {
+    fs.mkdirSync(LOGS_DIR, { recursive: true });
+  }
+} catch (e) {
+  console.warn(`[LOGGER] Could not create logs directory: ${e.message}`);
 }
 
 /**
@@ -28,8 +32,12 @@ export const logger = {
 
     const logString = JSON.stringify(logEntry, null, 2);
 
-    // Write to file
-    fs.appendFileSync(LOG_FILE, `\n${'='.repeat(80)}\n${logString}\n`);
+    // Write to file (optional, handle read-only filesystems)
+    try {
+      fs.appendFileSync(LOG_FILE, `\n${'='.repeat(80)}\n${logString}\n`);
+    } catch (e) {
+      // Ignore write errors in production/serverless
+    }
 
     // Also log to console
     console.log(`[${timestamp}] [${type.toUpperCase()}]:`, data);
@@ -67,7 +75,11 @@ export const logger = {
     };
 
     const logString = JSON.stringify(logEntry, null, 2);
-    fs.appendFileSync(LOG_FILE, `\n${'='.repeat(80)}\n${logString}\n`);
+    try {
+      fs.appendFileSync(LOG_FILE, `\n${'='.repeat(80)}\n${logString}\n`);
+    } catch (e) {
+      // Ignore write errors
+    }
     console.error(`[${timestamp}] [ERROR] [${context}]:`, error);
   },
 
@@ -86,8 +98,12 @@ export const logger = {
    * Clear all logs
    */
   clearLogs: () => {
-    if (fs.existsSync(LOG_FILE)) {
-      fs.writeFileSync(LOG_FILE, '');
+    try {
+      if (fs.existsSync(LOG_FILE)) {
+        fs.writeFileSync(LOG_FILE, '');
+      }
+    } catch (e) {
+      // Ignore
     }
   },
 };

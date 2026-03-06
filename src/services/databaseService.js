@@ -1,25 +1,23 @@
-import fs from 'fs';
-import path from 'path';
 import { logger } from '@/lib/logger';
+import clientPromise from '@/lib/mongodb';
+import { ObjectId } from 'mongodb';
 
-const DATA_DIR = path.join(process.cwd(), 'src', 'data');
-const PROPOSALS_FILE = path.join(DATA_DIR, 'proposals.json');
-
-// Ensure data directory exists
-if (!fs.existsSync(DATA_DIR)) {
-  fs.mkdirSync(DATA_DIR, { recursive: true });
-}
-
-// Initialize proposals file if it doesn't exist
-if (!fs.existsSync(PROPOSALS_FILE)) {
-  fs.writeFileSync(PROPOSALS_FILE, JSON.stringify([], null, 2));
-}
+const DB_NAME = process.env.MONGODB_DB_NAME || 'rayeva';
+const COLLECTION_NAME = 'proposals';
 
 /**
  * Database service for storing and retrieving proposals
- * Uses local JSON file as mock database
+ * Uses MongoDB for persistence
  */
 export const databaseService = {
+  /**
+   * Get the database collection
+   */
+  getCollection: async () => {
+    const client = await clientPromise;
+    return client.db(DB_NAME).collection(COLLECTION_NAME);
+  },
+
   /**
    * Save a proposal to the database
    * @param {object} proposal - The proposal to save
@@ -27,33 +25,32 @@ export const databaseService = {
    */
   saveProposal: async (proposal) => {
     try {
-      // Read existing proposals
-      const proposals = await databaseService.getAllProposals();
+      const collection = await databaseService.getCollection();
 
       // Create new proposal with metadata
       const newProposal = {
-        id: `PROP-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
         ...proposal,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
         status: 'draft',
       };
 
-      // Add to proposals array
-      proposals.push(newProposal);
+      const result = await collection.insertOne(newProposal);
 
-      // Write back to file
-      fs.writeFileSync(PROPOSALS_FILE, JSON.stringify(proposals, null, 2));
+      const savedProposal = {
+        ...newProposal,
+        id: result.insertedId.toString(),
+      };
 
       logger.log('database', {
         action: 'save',
-        proposalId: newProposal.id,
+        proposalId: savedProposal.id,
         timestamp: new Date().toISOString(),
       });
 
       return {
         success: true,
-        data: newProposal,
+        data: savedProposal,
       };
     } catch (error) {
       logger.logError('Database Save Error', error);
@@ -70,12 +67,14 @@ export const databaseService = {
    */
   getAllProposals: async () => {
     try {
-      if (!fs.existsSync(PROPOSALS_FILE)) {
-        return [];
-      }
+      const collection = await databaseService.getCollection();
+      const proposals = await collection.find({}).sort({ createdAt: -1 }).toArray();
 
-      const data = fs.readFileSync(PROPOSALS_FILE, 'utf-8');
-      return JSON.parse(data);
+      return proposals.map(p => ({
+        ...p,
+        id: p._id.toString(),
+        _id: undefined
+      }));
     } catch (error) {
       logger.logError('Database Read Error', error);
       return [];
@@ -89,10 +88,16 @@ export const databaseService = {
    */
   getProposalById: async (id) => {
     try {
-      const proposals = await databaseService.getAllProposals();
-      const proposal = proposals.find((p) => p.id === id);
-      
-      return proposal || null;
+      const collection = await databaseService.getCollection();
+      const proposal = await collection.findOne({ _id: new ObjectId(id) });
+
+      if (!proposal) return null;
+
+      return {
+        ...proposal,
+        id: proposal._id.toString(),
+        _id: undefined
+      };
     } catch (error) {
       logger.logError('Database Get By ID Error', error);
       return null;
@@ -107,23 +112,25 @@ export const databaseService = {
    */
   updateProposal: async (id, updates) => {
     try {
-      const proposals = await databaseService.getAllProposals();
-      const index = proposals.findIndex((p) => p.id === id);
+      const collection = await databaseService.getCollection();
 
-      if (index === -1) {
+      const updateData = {
+        ...updates,
+        updatedAt: new Date().toISOString(),
+      };
+
+      const result = await collection.findOneAndUpdate(
+        { _id: new ObjectId(id) },
+        { $set: updateData },
+        { returnDocument: 'after' }
+      );
+
+      if (!result) {
         return {
           success: false,
           error: 'Proposal not found',
         };
       }
-
-      proposals[index] = {
-        ...proposals[index],
-        ...updates,
-        updatedAt: new Date().toISOString(),
-      };
-
-      fs.writeFileSync(PROPOSALS_FILE, JSON.stringify(proposals, null, 2));
 
       logger.log('database', {
         action: 'update',
@@ -133,7 +140,11 @@ export const databaseService = {
 
       return {
         success: true,
-        data: proposals[index],
+        data: {
+          ...result,
+          id: result._id.toString(),
+          _id: undefined
+        },
       };
     } catch (error) {
       logger.logError('Database Update Error', error);
@@ -151,17 +162,15 @@ export const databaseService = {
    */
   deleteProposal: async (id) => {
     try {
-      const proposals = await databaseService.getAllProposals();
-      const filteredProposals = proposals.filter((p) => p.id !== id);
+      const collection = await databaseService.getCollection();
+      const result = await collection.deleteOne({ _id: new ObjectId(id) });
 
-      if (filteredProposals.length === proposals.length) {
+      if (result.deletedCount === 0) {
         return {
           success: false,
           error: 'Proposal not found',
         };
       }
-
-      fs.writeFileSync(PROPOSALS_FILE, JSON.stringify(filteredProposals, null, 2));
 
       logger.log('database', {
         action: 'delete',
@@ -189,14 +198,21 @@ export const databaseService = {
    */
   searchProposals: async (query) => {
     try {
-      const proposals = await databaseService.getAllProposals();
+      const collection = await databaseService.getCollection();
       const lowerQuery = query.toLowerCase();
 
-      return proposals.filter(
-        (p) =>
-          p.clientName?.toLowerCase().includes(lowerQuery) ||
-          p.sustainabilityGoals?.toLowerCase().includes(lowerQuery)
-      );
+      const proposals = await collection.find({
+        $or: [
+          { clientName: { $regex: lowerQuery, $options: 'i' } },
+          { sustainabilityGoals: { $regex: lowerQuery, $options: 'i' } }
+        ]
+      }).toArray();
+
+      return proposals.map(p => ({
+        ...p,
+        id: p._id.toString(),
+        _id: undefined
+      }));
     } catch (error) {
       logger.logError('Database Search Error', error);
       return [];
