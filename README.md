@@ -6,7 +6,7 @@ The Rayeva B2B Proposal Generator is built with a modern, scalable stack designe
 
 ### 1. **Core Framework**
 - **Next.js (App Router)**: Powers the entire application, utilizing both Client and Server Components for optimal performance and SEO.
-- **Tailwind CSS**: A customized design system ("Rayeva Pulse 2026") built on utility-first principles, featuring modern glassmorphism and bento-grid layouts.
+- **Tailwind CSS**: A customized design system built on utility-first principles, featuring modern glassmorphism and bento-grid layouts.
 
 ### 2. **AI Service Layer**
 - **OpenAI SDK / OpenRouter**: The "brain" of the app. It uses advanced thinking models (like Liquid LFM) to interpret client requirements and generate structured JSON proposals.
@@ -49,23 +49,25 @@ An AI-powered B2B proposal generation module for Rayeva's sustainable commerce p
 ## Features
 
 - 🤖 **AI-Powered Proposals**: Generate customized B2B proposals using advanced Reasoning Models via OpenRouter
+- ✍️ **Strategic Executive Summaries**: AI-driven persuasive narratives that justify investments based on specific client goals
 - 🌱 **Sustainable Products**: Curated eco-friendly product recommendations with verifiable green features
-- 💰 **Smart Budgeting**: AI-optimized budget allocation that rigorously respects financial constraints
+- 💰 **Smart Budgeting**: AI-optimized budget allocation with clear progress tracking and unallocated fund monitoring
 - 📊 **Impact Metrics**: Quantified sustainability metrics (plastic saved, carbon offset, trees equivalent)
-- 💾 **Cloud Library**: Modular "Saved Proposals" management with real-time sync
-- 📝 **Audit Logging**: Comprehensive logging of prompts, raw responses, and token usage
-- 🎨 **Pulse 2026 UI**: High-fidelity Glassmorphism interface with Bento-grid layouts
-- 📄 **Professional Exports**: One-click PDF generation for client ready-to-share documents
+- 💾 **Cloud Library**: Modular "Saved Proposals" management with real-time database synchronization
+- 📝 **Audit Logging**: Comprehensive logging of prompts, raw responses, and token usage in `/logs`
+- 📱 **Mobile-First Responsive Design**: Specialized layouts for devices below 654px and 320px with intelligent tab switching
+- 📄 **Professional Exports**: One-click PDF generation for client-ready documents
 
 ## Tech Stack
 
 - **Framework**: Next.js 14+ (App Router)
 - **Design System**: Rayeva Pulse 2026 (Custom CSS + Tailwind)
+- **Responsive Layout**: Multi-breakpoint system (down to 320px) with adaptive UI components
 - **AI Infrastructure**: OpenAI SDK integrated with **OpenRouter.ai**
 - **Model**: Liquid LFM (Reasoning/Thinking) for superior logic
 - **Exporting**: jsPDF for high-fidelity document generation
 - **Database**: Local JSON persistence with audit capabilities
-- **Icons**: Lucide React + Interactive SVG Animations
+- **Icons**: SVG Path Animations and customized Lucide-based icons
 
 ## Project Structure
 
@@ -158,20 +160,21 @@ npm start
 1. **Enter Client Information**:
    - Client Name: Company or organization name
    - Total Budget: Available budget in USD
-   - Sustainability Goals: Describe environmental objectives
+   - Sustainability Goals: Describe environmental objectives (e.g., "Reduce carbon footprint")
 
-2. **Click "Generate Proposal"**:
-   - The AI will analyze your inputs
-   - Wait for the proposal to be generated (typically 10-30 seconds)
+2. **Click "Initialize Generation"**:
+   - The AI will analyze your inputs and calculate optimal allocations.
+   - On mobile devices, the UI will automatically switch to the **Preview Tab** once generation begins.
 
-3. **Review the Proposal**:
-   - **Overview**: Summary of categories and key metrics
-   - **Products**: Detailed product recommendations by category
-   - **Budget**: Cost breakdown and allocation visualization
-   - **Impact**: Environmental impact metrics
+3. **Review the Proposal Canvas**:
+   - **Overview**: Persuasive executive summaries and high-level statistics.
+   - **Products**: Detailed recommendations with specific sustainability features.
+   - **Budget**: Visual breakdown of **Budget Allocation Progress** and **Available Funds**.
+   - **Impact**: Quantified metrics and **Verified Sustainability** trust IDs.
 
-4. **Save the Proposal**:
-   - Click "Save to Database" to store the proposal locally
+4. **Secure to Cloud**:
+   - Click "Secure to Cloud" (icon-only on mobile) to store the proposal.
+   - Click "Export" to download a professional PDF copy.
 
 ### API Endpoints
 
