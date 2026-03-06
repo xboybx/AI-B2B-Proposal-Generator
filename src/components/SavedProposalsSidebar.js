@@ -9,6 +9,12 @@ export default function SavedProposalsSidebar({ isOpen, onSelectProposal, active
     const formatCurrency = (amount) =>
         new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(amount);
 
+    const formatDate = (dateStr) => {
+        if (!dateStr) return 'Recently';
+        const date = new Date(dateStr);
+        return isNaN(date.getTime()) ? 'Recently' : date.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+    };
+
     const fetchProposals = async () => {
         try {
             setLoading(true);
@@ -19,6 +25,26 @@ export default function SavedProposalsSidebar({ isOpen, onSelectProposal, active
             console.error('Failed to fetch saved proposals:', err);
         } finally {
             setLoading(false);
+        }
+    };
+
+    const handleDelete = async (e, id) => {
+        e.stopPropagation();
+        if (!confirm('Are you sure you want to delete this proposal?')) return;
+
+        try {
+            const res = await fetch(`/api/save-proposal?id=${id}`, {
+                method: 'DELETE',
+            });
+            const data = await res.json();
+            if (data.success) {
+                setSavedProposals(prev => prev.filter(p => p.id !== id));
+            } else {
+                alert('Failed to delete: ' + data.error);
+            }
+        } catch (err) {
+            console.error('Delete error:', err);
+            alert('An error occurred while deleting.');
         }
     };
 
@@ -92,13 +118,24 @@ export default function SavedProposalsSidebar({ isOpen, onSelectProposal, active
                                     }`}
                             >
                                 {isActive && <div className="absolute left-0 top-0 bottom-0 w-1 bg-rayeva-emerald" />}
-                                <p className={`text-xs font-bold truncate leading-none transition-colors ${isActive ? 'text-rayeva-emerald' : 'text-slate-900 group-hover:text-rayeva-emerald'}`}>
-                                    {p.clientName}
-                                </p>
+                                <div className="flex justify-between items-start">
+                                    <p className={`text-xs font-bold truncate pr-6 leading-none transition-colors ${isActive ? 'text-rayeva-emerald' : 'text-slate-900 group-hover:text-rayeva-emerald'}`}>
+                                        {p.clientName}
+                                    </p>
+                                    <button
+                                        onClick={(e) => handleDelete(e, p.id)}
+                                        className="absolute top-3 right-3 p-1.5 rounded-lg text-slate-300 hover:text-red-500 hover:bg-red-50 transition-all opacity-0 group-hover:opacity-100"
+                                        title="Delete Record"
+                                    >
+                                        <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                        </svg>
+                                    </button>
+                                </div>
                                 <div className="flex justify-between items-center mt-3">
                                     <p className="text-[10px] font-bold text-slate-400 uppercase tracking-tight">{formatCurrency(p.totalBudget)}</p>
                                     <p className="text-[10px] font-medium text-slate-300">
-                                        {new Date(p.savedAt || p.generatedAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
+                                        {formatDate(p.createdAt || p.savedAt || p.generatedAt)}
                                     </p>
                                 </div>
                             </button>

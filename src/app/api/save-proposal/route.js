@@ -84,3 +84,48 @@ export async function GET() {
     );
   }
 }
+
+/**
+ * DELETE /api/save-proposal
+ * Delete a proposal by ID
+ */
+export async function DELETE(request) {
+  try {
+    const { searchParams } = new URL(request.url);
+    const id = searchParams.get('id');
+
+    if (!id) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: 'Missing required parameter: id',
+        },
+        { status: 400 }
+      );
+    }
+
+    const result = await databaseService.deleteProposal(id);
+
+    if (!result.success) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: result.error,
+        },
+        { status: 500 }
+      );
+    }
+
+    return NextResponse.json(result);
+
+  } catch (error) {
+    logger.logError('API Delete Proposal Error', error);
+    return NextResponse.json(
+      {
+        success: false,
+        error: error.message || 'Internal server error',
+      },
+      { status: 500 }
+    );
+  }
+}
