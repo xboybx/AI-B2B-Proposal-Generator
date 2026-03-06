@@ -14,63 +14,24 @@ const openai = new OpenAI({
  * System prompt for the B2B Proposal Generator
  * Instructs AI to return structured JSON with sustainable product recommendations
  */
-const SYSTEM_PROMPT = `You are an expert B2B sustainable commerce consultant for Rayeva, a platform specializing in eco-friendly products.
-
-Your task is to generate a comprehensive B2B proposal based on the client's budget and sustainability goals.
-
-You MUST return a valid JSON object with the following structure:
+const SYSTEM_PROMPT = `Expert B2B sustainable consultant for Rayeva.
+Generate a proposal JSON with this structure:
 {
   "clientName": "string",
   "totalBudget": number,
   "sustainabilityGoals": "string",
-  "productMix": [
-    {
-      "category": "string (e.g., 'Office Supplies', 'Packaging Materials', 'Corporate Gifts')",
-      "products": [
-        {
-          "name": "string",
-          "description": "string",
-          "quantity": number,
-          "unitPrice": number,
-          "totalPrice": number,
-          "sustainabilityFeature": "string (e.g., '100% Recycled Materials', 'Biodegradable', 'Carbon Neutral')"
-        }
-      ]
-    }
-  ],
-  "budgetAllocation": {
-    "officeSupplies": number,
-    "packagingMaterials": number,
-    "corporateGifts": number,
-    "other": number
-  },
-  "costBreakdown": [
-    {
-      "category": "string",
-      "allocatedAmount": number,
-      "percentageOfBudget": number
-    }
-  ],
-  "impactPositioningSummary": {
-    "plasticSavedKg": number,
-    "carbonOffsetKg": number,
-    "treesEquivalent": number,
-    "waterSavedLiters": number,
-    "keyMessage": "string (e.g., 'This proposal saves 500 kg of plastic, equivalent to planting 200 trees')"
-  },
-  "timeline": "string (estimated delivery timeline)",
-  "notes": "string (any additional recommendations)"
+  "productMix": [{"category": "string", "products": [{"name": "string", "description": "string", "quantity": number, "unitPrice": number, "totalPrice": number, "sustainabilityFeature": "string"}]}],
+  "budgetAllocation": {"officeSupplies": number, "packagingMaterials": number, "corporateGifts": number, "other": number},
+  "costBreakdown": [{"category": "string", "allocatedAmount": number, "percentageOfBudget": number}],
+  "impactPositioningSummary": {"plasticSavedKg": number, "carbonOffsetKg": number, "treesEquivalent": number, "waterSavedLiters": number, "keyMessage": "string"},
+  "timeline": "string",
+  "notes": "string"
 }
-
-IMPORTANT RULES:
-1. The sum of all product prices MUST NOT exceed the total budget
-2. Allocate budget strategically across categories based on typical B2B needs
-3. Ensure all products are genuinely sustainable with verifiable eco-friendly features
-4. Provide realistic pricing for sustainable products
-5. The impact summary should be quantified and impressive but realistic
-6. Include at least 3-4 product categories
-7. Each category should have 2-4 specific products
-8. Return ONLY the JSON object, no markdown formatting, no explanations`;
+RULES:
+1. Total prices sum MUST NOT exceed budget.
+2. 3-4 categories, 2-3 products each.
+3. Impact metrics must be realistic counts.
+4. Output RAW JSON ONLY. No markdown, no 'think' tags in output.`;
 
 /**
  * Generate a B2B proposal using OpenAI
@@ -107,76 +68,81 @@ Please provide a comprehensive proposal with product recommendations, budget all
       timestamp: new Date().toISOString(),
     });
 
-    // Call AI API with retry on empty response
-    let response;
-    let content;
-    const MAX_RETRIES = 2;
+    // Robust Retry Loop: Handles empty responses, malformed JSON, and validation failures
+    let proposalData;
+    let lastError;
+    let content = ''; // Define content in the function scope
+    const MAX_RETRIES = 3;
 
     for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
-      response = await openai.chat.completions.create({
-        model: 'liquid/lfm-2.5-1.2b-thinking:free',
-        messages: [
-          { role: 'system', content: SYSTEM_PROMPT },
-          { role: 'user', content: userPrompt },
-        ],
-        temperature: 0.7,
-        max_tokens: 4000,
-      });
+      try {
+        const response = await openai.chat.completions.create({
+          model: 'liquid/lfm-2.5-1.2b-thinking:free',
+          messages: [
+            { role: 'system', content: SYSTEM_PROMPT },
+            { role: 'user', content: userPrompt },
+          ],
+          temperature: 0.7,
+          max_tokens: 4000 //Reduced slightly to avoid truncation on free-tier
+        });
 
-      // Some thinking models put output in 'reasoning' field instead of 'content'
-      const choice = response.choices[0];
-      content = choice?.message?.content || choice?.message?.reasoning || '';
+        // Some thinking models put output in 'reasoning' field instead of 'content'
+        const choice = response.choices[0];
+        content = choice?.message?.content || choice?.message?.reasoning || '';
 
-      if (content && content.trim().length > 0) break;
+        if (!content || content.trim().length === 0) {
+          throw new Error('AI returned an empty response');
+        }
 
-      console.warn(`Attempt ${attempt}: Empty response from AI, retrying...`);
-      if (attempt === MAX_RETRIES) {
-        throw new Error('AI returned an empty response after multiple attempts. The model may be rate-limited or overloaded. Please try again in a few seconds.');
+        // Log the raw response for auditing
+        logger.logResponse({
+          rawContent: content,
+          model: response.model,
+          usage: response.usage,
+          timestamp: new Date().toISOString(),
+        });
+
+        // --- ATTEMPT PARSING ---
+        // Clean up: remove <think> blocks and isolate the JSON object
+        let cleanContent = content.replace(/<think>[\s\S]*?<\/think>/g, '');
+        const jsonMatch = cleanContent.match(/\{[\s\S]*\}/);
+
+        if (!jsonMatch) {
+          throw new Error('No JSON object found in the response metadata');
+        }
+
+        proposalData = JSON.parse(jsonMatch[0].trim());
+
+        // --- ATTEMPT VALIDATION ---
+        validateProposalData(proposalData, totalBudget);
+
+        // SUCCESS: Output is valid
+        return {
+          success: true,
+          data: proposalData,
+          rawResponse: content,
+        };
+
+      } catch (err) {
+        lastError = err;
+        console.warn(`[RETRY ENGINE] Attempt ${attempt} failed: ${err.message}`);
+
+        if (attempt < MAX_RETRIES) {
+          // Wait 2 seconds before next attempt to allow for infrastructure stabilization
+          await new Promise(resolve => setTimeout(resolve, 2000));
+        }
       }
-      // Wait 2 seconds before retrying
-      await new Promise(resolve => setTimeout(resolve, 2000));
     }
 
-    // Log the raw response
-    logger.logResponse({
-      rawContent: content,
-      model: response.model,
-      usage: response.usage,
-      timestamp: new Date().toISOString(),
-    });
-
-    // Parse JSON response
-    let proposalData;
-    try {
-      // Clean up the response - remove <think> blocks and extra text
-      let cleanContent = content.replace(/<think>[\s\S]*?<\/think>/g, '');
-      const jsonMatch = cleanContent.match(/\{[\s\S]*\}/);
-
-      if (!jsonMatch) {
-        throw new Error('No JSON object found in the response');
-      }
-
-      cleanContent = jsonMatch[0].trim();
-      proposalData = JSON.parse(cleanContent);
-    } catch (parseError) {
-      logger.logError('JSON Parse Error', parseError);
-      throw new Error('Failed to parse AI response as JSON');
-    }
-
-    // Validate the proposal data structure
-    validateProposalData(proposalData, totalBudget);
-
-    return {
-      success: true,
-      data: proposalData,
-      rawResponse: content,
-    };
+    // If we get here, all retries failed
+    logger.logError('All Generation Attempts Failed', lastError);
+    throw new Error(`The AI service failed to provide a valid proposal after ${MAX_RETRIES} attempts. Reason: ${lastError.message}. Please try a simpler prompt or check your connection.`);
 
   } catch (error) {
-    logger.logError('Generate Proposal Error', error);
+    logger.logError('Fatal Generate Proposal Error', error);
     return {
       success: false,
-      error: error.message || 'Failed to generate proposal',
+      error: error.message || 'The Neural Pipeline suffered a critical interruption.',
     };
   }
 }

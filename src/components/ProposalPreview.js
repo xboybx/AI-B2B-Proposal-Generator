@@ -41,128 +41,109 @@ export default function ProposalPreview({
   ];
 
   return (
-    <div className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden">
-      {/* Header */}
-      <div className="bg-gradient-to-r from-secondary-500 to-secondary-600 px-6 py-4">
-        <div className="flex items-center justify-between">
+    <div className="glass-card rounded-[32px] overflow-hidden border-none shadow-2xl flex flex-col h-[850px]">
+      {/* Premium Header */}
+      <div className="p-8 pb-4 relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-64 h-64 bg-rayeva-lime/10 rounded-full blur-[100px] -mr-32 -mt-32" />
+
+        <div className="relative flex justify-between items-start">
           <div>
-            <h2 className="text-xl font-semibold text-white">
-              Proposal Preview
-            </h2>
-            <p className="text-secondary-100 text-sm mt-1">
+            <div className="flex items-center gap-2 mb-2">
+              <span className="w-2 h-2 rounded-full bg-rayeva-emerald animate-pulse" />
+              <span className="text-[10px] font-bold uppercase tracking-widest text-rayeva-emerald">Draft Proposal</span>
+            </div>
+            <h2 className="text-3xl font-display font-bold text-slate-900 leading-tight">
               {proposal.clientName}
-            </p>
+            </h2>
+            <p className="text-slate-400 text-sm mt-1 font-medium">{proposal.sustainabilityGoals.substring(0, 60)}...</p>
           </div>
           <div className="text-right">
-            <p className="text-secondary-100 text-sm">Total Budget</p>
-            <p className="text-white text-2xl font-bold">
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-1">Total Allotment</p>
+            <p className="text-3xl font-display font-bold text-rayeva-emerald">
               {formatCurrency(proposal.totalBudget)}
             </p>
           </div>
         </div>
       </div>
 
-      {/* Tabs */}
-      <div className="border-b border-gray-200">
-        <div className="flex">
+      {/* Sophisticated Tabs */}
+      <div className="px-8 mb-4">
+        <div className="flex bg-slate-100/50 p-1.5 rounded-2xl gap-1">
           {tabs.map((tab) => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`flex-1 py-3 px-4 text-sm font-medium transition-colors ${activeTab === tab.id
-                ? 'text-primary-600 border-b-2 border-primary-600 bg-primary-50'
-                : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+              className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl text-xs font-bold transition-all duration-300 ${activeTab === tab.id
+                ? 'bg-white text-rayeva-emerald shadow-sm'
+                : 'text-slate-500 hover:text-slate-700 hover:bg-white/50'
                 }`}
             >
-              <span className="mr-2">{tab.icon}</span>
+              <span className="opacity-70 text-base">{tab.icon}</span>
               {tab.label}
             </button>
           ))}
         </div>
       </div>
 
-      {/* Content */}
-      <div className="p-6 max-h-[500px] overflow-y-auto">
-        {activeTab === 'overview' && (
-          <OverviewTab proposal={proposal} formatCurrency={formatCurrency} />
-        )}
-        {activeTab === 'products' && (
-          <ProductsTab proposal={proposal} formatCurrency={formatCurrency} />
-        )}
-        {activeTab === 'budget' && (
-          <BudgetTab proposal={proposal} formatCurrency={formatCurrency} />
-        )}
-        {activeTab === 'impact' && <ImpactTab proposal={proposal} />}
+      {/* Content Canvas */}
+      <div className="flex-1 px-8 py-4 overflow-y-auto custom-scrollbar">
+        <div className="animate-fade-in">
+          {activeTab === 'overview' && (
+            <OverviewTab proposal={proposal} formatCurrency={formatCurrency} />
+          )}
+          {activeTab === 'products' && (
+            <ProductsTab proposal={proposal} formatCurrency={formatCurrency} />
+          )}
+          {activeTab === 'budget' && (
+            <BudgetTab proposal={proposal} formatCurrency={formatCurrency} />
+          )}
+          {activeTab === 'impact' && <ImpactTab proposal={proposal} />}
+        </div>
       </div>
 
-      {/* Footer Actions */}
-      <div className="border-t border-gray-200 p-6 bg-gray-50">
-        <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-3">
+      {/* Premium Action Bar */}
+      <div className="p-8 pt-4 bg-slate-50/50 border-t border-slate-100">
+        <div className="flex flex-col sm:flex-row gap-4">
           <button
             onClick={onSave}
             disabled={saving || saved}
-            className={`flex-1 py-3 px-4 rounded-lg font-semibold transition-all flex items-center justify-center space-x-2 ${saved
-              ? 'bg-green-500 text-white'
-              : 'bg-primary-600 text-white hover:bg-primary-700 disabled:bg-gray-400'
+            className={`flex-[2] h-14 rounded-2xl font-bold uppercase tracking-widest text-xs transition-all flex items-center justify-center gap-3 glow-on-hover ${saved
+              ? 'bg-rayeva-emerald text-white'
+              : 'bg-rayeva-emerald text-white hover:shadow-xl hover:shadow-rayeva-emerald/20 disabled:bg-slate-300'
               }`}
           >
             {saving ? (
-              <>
-                <div className="loader-save" />
-                <span>Saving...</span>
-              </>
+              <div className="loader-save" />
             ) : saved ? (
               <>
-                <svg
-                  className="w-5 h-5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M5 13l4 4L19 7"
-                  />
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
                 </svg>
-                <span>Saved!</span>
-              </>
-            ) : (
-              <>
-                <svg
-                  className="w-5 h-5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"
-                  />
-                </svg>
-                <span>Save to Database</span>
-              </>
-            )}
-          </button>
-          <button
-            onClick={handleExportPDF}
-            disabled={exporting}
-            className="flex-1 py-3 px-4 rounded-lg font-semibold bg-gray-900 text-white hover:bg-gray-800 transition-all flex items-center justify-center space-x-2 disabled:bg-gray-400"
-          >
-            {exporting ? (
-              <>
-                <div className="loader-export" />
-                <span>Exporting...</span>
+                <span>Synchronized</span>
               </>
             ) : (
               <>
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" />
                 </svg>
-                <span>Export PDF</span>
+                <span>Secure to Cloud</span>
+              </>
+            )}
+          </button>
+
+          <button
+            onClick={handleExportPDF}
+            disabled={exporting}
+            className="flex-1 h-14 rounded-2xl font-bold uppercase tracking-widest text-xs bg-slate-900 text-white hover:bg-slate-800 transition-all flex items-center justify-center gap-3 disabled:bg-slate-300 shadow-xl shadow-slate-900/10"
+          >
+            {exporting ? (
+              <div className="loader-export" />
+            ) : (
+              <>
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                </svg>
+                <span>Export</span>
               </>
             )}
           </button>
@@ -170,17 +151,21 @@ export default function ProposalPreview({
           <button
             onClick={onReset}
             disabled={saving}
-            className="px-4 py-3 border border-gray-300 rounded-lg text-gray-700 font-medium hover:bg-gray-50 transition-colors disabled:opacity-50"
+            className="w-14 h-14 rounded-2xl border border-slate-200 bg-white text-slate-400 hover:text-rayeva-emerald hover:border-rayeva-emerald transition-all flex items-center justify-center shrink-0"
+            title="Reset Canvas"
           >
-            New Proposal
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+            </svg>
           </button>
         </div>
 
         {proposal.timeline && (
-          <p className="mt-4 text-sm text-gray-500 text-center">
-            <span className="font-medium">Estimated Timeline:</span>{' '}
-            {proposal.timeline}
-          </p>
+          <div className="mt-6 flex justify-center items-center gap-2">
+            <span className="text-[10px] font-bold uppercase tracking-widest text-slate-300">Target Delivery</span>
+            <div className="h-px w-8 bg-slate-100" />
+            <span className="text-xs font-bold text-slate-500 uppercase">{proposal.timeline}</span>
+          </div>
         )}
       </div>
     </div>
@@ -194,50 +179,45 @@ function OverviewTab({ proposal, formatCurrency }) {
   );
 
   return (
-    <div className="space-y-6">
-      {/* Quick Stats */}
-      <div className="grid grid-cols-2 gap-4">
-        <div className="bg-primary-50 p-4 rounded-lg text-center">
-          <p className="text-3xl font-bold text-primary-600">
+    <div className="space-y-8 py-4">
+      {/* Dynamic Statistics */}
+      <div className="grid grid-cols-2 gap-6">
+        <div className="p-6 rounded-3xl bg-rayeva-lime/10 border border-rayeva-lime/20 group hover:scale-[1.02] transition-transform">
+          <p className="text-4xl font-display font-bold text-rayeva-emerald mb-1">
             {proposal.productMix?.length || 0}
           </p>
-          <p className="text-sm text-gray-600">Product Categories</p>
+          <p className="text-[11px] font-bold uppercase tracking-widest text-rayeva-emerald/60">Key Clusters</p>
         </div>
-        <div className="bg-secondary-50 p-4 rounded-lg text-center">
-          <p className="text-3xl font-bold text-secondary-600">
+        <div className="p-6 rounded-3xl bg-indigo-50 border border-indigo-100 group hover:scale-[1.02] transition-transform">
+          <p className="text-4xl font-display font-bold text-indigo-600 mb-1">
             {totalProducts}
           </p>
-          <p className="text-sm text-gray-600">Total Products</p>
+          <p className="text-[11px] font-bold uppercase tracking-widest text-indigo-400">Total Asset Mix</p>
         </div>
       </div>
 
-      {/* Sustainability Goals */}
-      <div className="bg-gray-50 p-4 rounded-lg">
-        <h4 className="font-semibold text-gray-900 mb-2">
-          Sustainability Goals
-        </h4>
-        <p className="text-gray-700">{proposal.sustainabilityGoals}</p>
+      {/* Sustainable Vision */}
+      <div className="space-y-3">
+        <h4 className="text-[11px] font-bold uppercase tracking-[0.2em] text-slate-400">Sustainable Vision</h4>
+        <div className="p-6 rounded-3xl bg-white border border-slate-100 shadow-sm relative overflow-hidden group">
+          <div className="absolute top-0 left-0 w-1 h-full bg-rayeva-emerald opacity-20 group-hover:opacity-100 transition-opacity" />
+          <p className="text-slate-600 font-medium leading-relaxed italic text-lg">"{proposal.sustainabilityGoals}"</p>
+        </div>
       </div>
 
-      {/* Key Message */}
+      {/* Value Proposition */}
       {proposal.impactPositioningSummary?.keyMessage && (
-        <div className="bg-gradient-to-r from-green-50 to-emerald-50 p-4 rounded-lg border border-green-200">
-          <h4 className="font-semibold text-green-800 mb-2 flex items-center">
-            <span className="mr-2">🌟</span> Impact Highlight
-          </h4>
-          <p className="text-green-700">
-            {proposal.impactPositioningSummary.keyMessage}
-          </p>
-        </div>
-      )}
-
-      {/* Notes */}
-      {proposal.notes && (
-        <div className="bg-blue-50 p-4 rounded-lg">
-          <h4 className="font-semibold text-blue-800 mb-2">
-            Additional Notes
-          </h4>
-          <p className="text-blue-700">{proposal.notes}</p>
+        <div className="space-y-3">
+          <h4 className="text-[11px] font-bold uppercase tracking-[0.2em] text-slate-400">Strategic Positioning</h4>
+          <div className="p-6 rounded-3xl bg-gradient-to-br from-slate-900 to-slate-800 text-white shadow-xl relative group overflow-hidden">
+            <div className="absolute bottom-0 right-0 w-32 h-32 bg-rayeva-lime/10 rounded-full blur-3xl" />
+            <div className="flex gap-4 items-start relative overflow-hidden">
+              <span className="text-2xl mt-1">✨</span>
+              <p className="text-sm font-medium leading-relaxed text-slate-200">
+                {proposal.impactPositioningSummary.keyMessage}
+              </p>
+            </div>
+          </div>
         </div>
       )}
     </div>
@@ -246,36 +226,37 @@ function OverviewTab({ proposal, formatCurrency }) {
 
 function ProductsTab({ proposal, formatCurrency }) {
   return (
-    <div className="space-y-6">
+    <div className="space-y-8 py-4">
       {proposal.productMix?.map((category, catIndex) => (
-        <div key={catIndex} className="border border-gray-200 rounded-lg overflow-hidden">
-          <div className="bg-gray-50 px-4 py-3 border-b border-gray-200">
-            <h4 className="font-semibold text-gray-900">{category.category}</h4>
+        <div key={catIndex} className="space-y-4">
+          <div className="flex items-center gap-4">
+            <h4 className="text-sm font-bold uppercase tracking-widest text-rayeva-emerald">{category.category}</h4>
+            <div className="h-px flex-1 bg-slate-100" />
           </div>
-          <div className="divide-y divide-gray-100">
+          <div className="grid gap-4">
             {category.products?.map((product, prodIndex) => (
-              <div key={prodIndex} className="p-4 hover:bg-gray-50 transition-colors">
-                <div className="flex justify-between items-start">
+              <div key={prodIndex} className="p-5 bg-white border border-slate-100 rounded-3xl hover:border-rayeva-emerald/20 hover:shadow-xl hover:shadow-slate-200/50 transition-all group">
+                <div className="flex justify-between items-start gap-4">
                   <div className="flex-1">
-                    <h5 className="font-medium text-gray-900">{product.name}</h5>
-                    <p className="text-sm text-gray-600 mt-1">
+                    <h5 className="font-display font-bold text-slate-900 text-lg group-hover:text-rayeva-emerald transition-colors">{product.name}</h5>
+                    <p className="text-xs text-slate-500 mt-2 leading-relaxed">
                       {product.description}
                     </p>
-                    <div className="flex items-center mt-2 space-x-3">
-                      <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full">
+                    <div className="flex items-center mt-4 gap-3">
+                      <span className="text-[10px] font-bold bg-rayeva-lime/20 text-rayeva-emerald px-2.5 py-1 rounded-full uppercase tracking-tight">
                         {product.sustainabilityFeature}
                       </span>
-                      <span className="text-xs text-gray-500">
-                        Qty: {product.quantity}
+                      <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                        Units: {product.quantity}
                       </span>
                     </div>
                   </div>
-                  <div className="text-right ml-4">
-                    <p className="font-semibold text-gray-900">
+                  <div className="text-right shrink-0">
+                    <p className="text-lg font-display font-bold text-slate-900">
                       {formatCurrency(product.totalPrice)}
                     </p>
-                    <p className="text-xs text-gray-500">
-                      {formatCurrency(product.unitPrice)} each
+                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">
+                      {formatCurrency(product.unitPrice)} / Unit
                     </p>
                   </div>
                 </div>
@@ -295,90 +276,65 @@ function BudgetTab({ proposal, formatCurrency }) {
   );
 
   return (
-    <div className="space-y-6">
-      {/* Budget Summary */}
-      <div className="bg-gray-50 p-4 rounded-lg">
-        <div className="flex justify-between items-center mb-4">
-          <span className="text-gray-600">Total Budget</span>
-          <span className="font-semibold text-gray-900">
-            {formatCurrency(proposal.totalBudget)}
-          </span>
+    <div className="space-y-10 py-4">
+      {/* Fiscal Matrix */}
+      <div className="p-8 rounded-[40px] bg-slate-900 text-white relative overflow-hidden shadow-2xl">
+        <div className="absolute top-0 right-0 w-64 h-64 bg-rayeva-emerald opacity-20 blur-[100px]" />
+
+        <div className="grid grid-cols-2 gap-12 relative overflow-hidden">
+          <div>
+            <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400 mb-2">Portfolio Cap</p>
+            <p className="text-3xl font-display font-bold">{formatCurrency(proposal.totalBudget)}</p>
+          </div>
+          <div>
+            <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400 mb-2">Operational Float</p>
+            <p className="text-3xl font-display font-bold text-rayeva-lime">
+              {formatCurrency(proposal.totalBudget - totalAllocated)}
+            </p>
+          </div>
         </div>
-        <div className="flex justify-between items-center mb-4">
-          <span className="text-gray-600">Allocated</span>
-          <span className="font-semibold text-primary-600">
-            {formatCurrency(totalAllocated)}
-          </span>
-        </div>
-        <div className="border-t border-gray-200 pt-4 flex justify-between items-center bg-green-50 p-3 rounded-lg mt-2">
-          <span className="font-medium text-green-800 flex items-center">
-            <span className="mr-2">🎉</span> Money Saved
-          </span>
-          <span className="font-bold text-green-700 text-lg">
-            {formatCurrency(proposal.totalBudget - totalAllocated)}
-          </span>
+
+        <div className="mt-10 space-y-2">
+          <div className="flex justify-between text-[11px] font-bold uppercase tracking-widest">
+            <span>Execution Velocity</span>
+            <span className="text-rayeva-lime">{Math.round((totalAllocated / proposal.totalBudget) * 100)}% Usage</span>
+          </div>
+          <div className="h-1.5 w-full bg-slate-800 rounded-full overflow-hidden">
+            <div
+              className="h-full bg-rayeva-emerald transition-all duration-1000 shadow-[0_0_15px_rgba(6,78,59,0.5)]"
+              style={{ width: `${(totalAllocated / proposal.totalBudget) * 100}%` }}
+            />
+          </div>
         </div>
       </div>
 
-      {/* Cost Breakdown */}
-      <div>
-        <h4 className="font-semibold text-gray-900 mb-4">Cost Breakdown</h4>
-        <div className="space-y-3">
+      {/* Categorical Breakdown */}
+      <div className="space-y-6">
+        <h4 className="text-[11px] font-bold uppercase tracking-[0.2em] text-slate-400">Asset Allocation</h4>
+        <div className="space-y-6">
           {proposal.costBreakdown?.map((item, index) => (
-            <div key={index} className="flex items-center">
-              <div className="flex-1">
-                <div className="flex justify-between mb-1">
-                  <span className="text-sm font-medium text-gray-700">
+            <div key={index} className="group">
+              <div className="flex justify-between items-end mb-3">
+                <div>
+                  <span className="text-sm font-bold text-slate-900 group-hover:text-rayeva-emerald transition-colors">
                     {item.category}
                   </span>
-                  <span className="text-sm text-gray-600">
-                    {formatCurrency(item.allocatedAmount)} ({item.percentageOfBudget}%)
-                  </span>
+                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-tight mt-0.5">{item.percentageOfBudget}% Mix</p>
                 </div>
-                <div className="w-full bg-gray-200 rounded-full h-2">
-                  <div
-                    className="bg-primary-500 h-2 rounded-full transition-all"
-                    style={{ width: `${item.percentageOfBudget}%` }}
-                  />
-                </div>
+                <span className="text-sm font-display font-bold text-slate-900">
+                  {formatCurrency(item.allocatedAmount)}
+                </span>
+              </div>
+              <div className="h-1 w-full bg-slate-100 rounded-full overflow-hidden">
+                <div
+                  className="h-full bg-slate-900 group-hover:bg-rayeva-emerald transition-all duration-500"
+                  style={{ width: `${item.percentageOfBudget}%` }}
+                />
               </div>
             </div>
           ))}
         </div>
       </div>
-
-      {/* Budget Allocation Table */}
-      {proposal.budgetAllocation && (
-        <div>
-          <h4 className="font-semibold text-gray-900 mb-4">
-            Budget Allocation by Category
-          </h4>
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th className="px-4 py-2 text-left text-gray-600">Category</th>
-                  <th className="px-4 py-2 text-right text-gray-600">Amount</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-100">
-                {Object.entries(proposal.budgetAllocation).map(
-                  ([key, value]) => (
-                    <tr key={key} className="hover:bg-gray-50">
-                      <td className="px-4 py-3 capitalize text-gray-900">
-                        {key.replace(/([A-Z])/g, ' $1').trim()}
-                      </td>
-                      <td className="px-4 py-3 text-right font-medium text-gray-900">
-                        {formatCurrency(value)}
-                      </td>
-                    </tr>
-                  )
-                )}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
@@ -388,113 +344,67 @@ function ImpactTab({ proposal }) {
 
   if (!impact) {
     return (
-      <div className="text-center py-8 text-gray-500">
-        No impact data available
+      <div className="flex flex-col items-center justify-center py-20 text-slate-300">
+        <svg className="w-16 h-16 mb-4 opacity-20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0zM9 10a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1v-4z" />
+        </svg>
+        <span className="text-sm font-bold uppercase tracking-widest">Awaiting Analysis</span>
       </div>
     );
   }
 
   const impactMetrics = [
-    {
-      label: 'Plastic Saved',
-      value: impact.plasticSavedKg,
-      unit: 'kg',
-      icon: '🥤',
-      color: 'bg-blue-50 text-blue-700',
-    },
-    {
-      label: 'Carbon Offset',
-      value: impact.carbonOffsetKg,
-      unit: 'kg CO₂',
-      icon: '🌬️',
-      color: 'bg-gray-50 text-gray-700',
-    },
-    {
-      label: 'Trees Equivalent',
-      value: impact.treesEquivalent,
-      unit: 'trees',
-      icon: '🌳',
-      color: 'bg-green-50 text-green-700',
-    },
-    {
-      label: 'Water Saved',
-      value: impact.waterSavedLiters,
-      unit: 'liters',
-      icon: '💧',
-      color: 'bg-cyan-50 text-cyan-700',
-    },
+    { label: 'Plastic Prevention', value: impact.plasticSavedKg, unit: 'KG', icon: '♻️', style: 'bg-white border-slate-100' },
+    { label: 'Cloud Carbon Offset', value: impact.carbonOffsetKg, unit: 'CO2e', icon: '☁️', style: 'bg-white border-slate-100' },
+    { label: 'Regenerative Equivalent', value: impact.treesEquivalent, unit: 'TREES', icon: '🌿', style: 'bg-white border-slate-100' },
+    { label: 'Reserves Preserved', value: impact.waterSavedLiters, unit: 'LITERS', icon: '💧', style: 'bg-white border-slate-100' },
   ];
 
   return (
-    <div className="space-y-6">
-      {/* Impact Metrics Grid */}
+    <div className="space-y-10 py-4">
+      {/* Metrics Hex-Grid */}
       <div className="grid grid-cols-2 gap-4">
-        {impactMetrics.map(
-          (metric, index) =>
-            metric.value && (
-              <div
-                key={index}
-                className={`${metric.color} p-4 rounded-lg text-center`}
-              >
-                <div className="text-3xl mb-2">{metric.icon}</div>
-                <p className="text-2xl font-bold">{metric.value.toLocaleString()}</p>
-                <p className="text-sm opacity-80">{metric.unit}</p>
-                <p className="text-xs mt-1 opacity-60">{metric.label}</p>
-              </div>
-            )
-        )}
+        {impactMetrics.map((metric, index) => metric.value && (
+          <div key={index} className={`p-6 rounded-[32px] border ${metric.style} shadow-sm group hover:-translate-y-1 transition-all duration-300`}>
+            <span className="text-2xl mb-4 block filter grayscale group-hover:grayscale-0 transition-all">{metric.icon}</span>
+            <div className="flex items-baseline gap-1 mb-1">
+              <span className="text-3xl font-display font-bold text-slate-900">
+                {metric.value.toLocaleString()}
+              </span>
+              <span className="text-[10px] font-bold text-slate-400">{metric.unit}</span>
+            </div>
+            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest leading-tight">{metric.label}</p>
+          </div>
+        ))}
       </div>
 
-      {/* Key Message */}
+      {/* Narrative Position */}
       {impact.keyMessage && (
-        <div className="bg-gradient-to-r from-green-500 to-emerald-500 p-6 rounded-lg text-white">
-          <h4 className="font-semibold mb-2 flex items-center">
-            <span className="mr-2">🌍</span> Environmental Impact
-          </h4>
-          <p className="text-green-100">{impact.keyMessage}</p>
+        <div className="p-8 rounded-[40px] bg-rayeva-emerald text-white relative overflow-hidden group">
+          <div className="absolute top-0 right-0 w-32 h-32 bg-rayeva-lime/20 rounded-full blur-[60px]" />
+          <h4 className="text-[11px] font-bold uppercase tracking-[0.3em] text-rayeva-lime mb-4">Pulse Environmental Statement</h4>
+          <p className="text-lg font-medium leading-relaxed italic opacity-90 group-hover:opacity-100 transition-opacity">
+            "{impact.keyMessage}"
+          </p>
         </div>
       )}
 
-      {/* Impact Context */}
-      <div className="bg-gray-50 p-4 rounded-lg">
-        <h4 className="font-semibold text-gray-900 mb-3">
-          What This Means
-        </h4>
-        <ul className="space-y-2 text-sm text-gray-700">
-          {impact.plasticSavedKg > 0 && (
-            <li className="flex items-start">
-              <span className="mr-2">✓</span>
-              <span>
-                Eliminates {impact.plasticSavedKg.toLocaleString()} kg of plastic waste
-              </span>
-            </li>
-          )}
-          {impact.carbonOffsetKg > 0 && (
-            <li className="flex items-start">
-              <span className="mr-2">✓</span>
-              <span>
-                Offsets {impact.carbonOffsetKg.toLocaleString()} kg of CO₂ emissions
-              </span>
-            </li>
-          )}
-          {impact.treesEquivalent > 0 && (
-            <li className="flex items-start">
-              <span className="mr-2">✓</span>
-              <span>
-                Equivalent to planting {impact.treesEquivalent.toLocaleString()} trees
-              </span>
-            </li>
-          )}
-          {impact.waterSavedLiters > 0 && (
-            <li className="flex items-start">
-              <span className="mr-2">✓</span>
-              <span>
-                Saves {impact.waterSavedLiters.toLocaleString()} liters of water
-              </span>
-            </li>
-          )}
-        </ul>
+      {/* Sustainable Certification */}
+      <div className="p-6 rounded-3xl bg-slate-50 border border-slate-100 flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center shadow-sm">
+            <span className="text-rayeva-emerald text-xl">✓</span>
+          </div>
+          <div>
+            <p className="text-xs font-bold text-slate-900 uppercase">Verified Sustainability</p>
+            <p className="text-[10px] text-slate-400 font-medium tracking-tight">ID: PULSE-2026-RAY-882</p>
+          </div>
+        </div>
+        <div className="flex gap-1.5">
+          {[1, 2, 3].map(i => <div key={i} className="w-2 h-2 rounded-full bg-rayeva-lime" />)}
+        </div>
       </div>
     </div>
   );
 }
+

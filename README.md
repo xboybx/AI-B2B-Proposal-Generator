@@ -1,25 +1,71 @@
 # Rayeva B2B Proposal Generator
---fix ui , the fianl pdf to be more detailed and nice
+
+## 🏗️ Architecture Overview
+
+The Rayeva B2B Proposal Generator is built with a modern, scalable stack designed for real-time AI interactions and premium user experiences.
+
+### 1. **Core Framework**
+- **Next.js (App Router)**: Powers the entire application, utilizing both Client and Server Components for optimal performance and SEO.
+- **Tailwind CSS**: A customized design system ("Rayeva Pulse 2026") built on utility-first principles, featuring modern glassmorphism and bento-grid layouts.
+
+### 2. **AI Service Layer**
+- **OpenAI SDK / OpenRouter**: The "brain" of the app. It uses advanced thinking models (like Liquid LFM) to interpret client requirements and generate structured JSON proposals.
+- **Service-Oriented Architecture**: All AI logic is encapsulated in `@/services/openaiService.js`, keeping the API routes clean and maintainable.
+
+### 3. **Data & Persistence**
+- **Next.js API Routes**: Serverless functions handle proposal generation, storage, and retrieval.
+- **Structured Logging**: A custom logger tracks every AI transaction (prompts, raw responses, usage metrics) for transparency and debugging.
+
+### 4. **Export Engine**
+- **PDF Generation**: Uses `jspdf` to transform the digital canvas into professional, branded documents for offline distribution.
+
+---
+
+## 🧠 AI Prompt Design Strategy
+
+The generation engine uses a sophisticated "Constrained Creativity" prompt structure to ensure accuracy and professionalism.
+
+### **The Persona**
+The AI is instructed to act as a **"Rayeva Sustainability Expert."** This ensures the tone is professional, authoritative, and focused on business value rather than generic "green" advice.
+
+### **Structural Enforcement**
+We use a **System Prompt** that defines a strict JSON schema. This guarantees:
+- **Mathematical Consistency**: The AI performs real-time calculations to ensure product totals never exceed the client's budget.
+- **Category Strategy**: The AI is forced to distribute spend across at least 3-4 distinct B2B categories (e.g., Office Supplies, Corporate Gifts).
+
+### **Quantifiable Impact**
+The prompt specifically requests environmental metrics (Plastic, Carbon, Water, Trees). The AI uses internal heuristics to estimate these based on the products it selects, providing the "hard numbers" needed to close B2B deals.
+
+### **Post-Processing**
+The application includes a logic layer that:
+1. Strips internal "reasoning" or "thinking" blocks from the model.
+2. Validates JSON integrity before it touches the UI.
+3. Automatically fixes or ignores minor mathematical drift common in LLMs.
+
+---
+
 An AI-powered B2B proposal generation module for Rayeva's sustainable commerce platform. This application uses OpenAI's GPT-4 to generate comprehensive sustainable product proposals with budget allocation and environmental impact metrics.
 
 ## Features
 
-- 🤖 **AI-Powered Proposals**: Generate customized B2B proposals using OpenAI GPT-4
-- 🌱 **Sustainable Products**: Curated eco-friendly product recommendations
-- 💰 **Smart Budgeting**: AI-optimized budget allocation across categories
-- 📊 **Impact Metrics**: Quantified environmental impact (plastic saved, carbon offset, etc.)
-- 💾 **Local Storage**: Save proposals to local JSON database
-- 📝 **Audit Logging**: Comprehensive logging of all AI interactions
-- 🎨 **Modern UI**: Clean, responsive dashboard built with Tailwind CSS
+- 🤖 **AI-Powered Proposals**: Generate customized B2B proposals using advanced Reasoning Models via OpenRouter
+- 🌱 **Sustainable Products**: Curated eco-friendly product recommendations with verifiable green features
+- 💰 **Smart Budgeting**: AI-optimized budget allocation that rigorously respects financial constraints
+- 📊 **Impact Metrics**: Quantified sustainability metrics (plastic saved, carbon offset, trees equivalent)
+- 💾 **Cloud Library**: Modular "Saved Proposals" management with real-time sync
+- 📝 **Audit Logging**: Comprehensive logging of prompts, raw responses, and token usage
+- 🎨 **Pulse 2026 UI**: High-fidelity Glassmorphism interface with Bento-grid layouts
+- 📄 **Professional Exports**: One-click PDF generation for client ready-to-share documents
 
 ## Tech Stack
 
-- **Framework**: Next.js 14 (App Router)
-- **Language**: JavaScript (ES6+)
-- **Styling**: Tailwind CSS 3.4
-- **AI**: OpenAI Node.js SDK (GPT-4o)
-- **Database**: Local JSON file (mock database)
-- **Icons**: Lucide React
+- **Framework**: Next.js 14+ (App Router)
+- **Design System**: Rayeva Pulse 2026 (Custom CSS + Tailwind)
+- **AI Infrastructure**: OpenAI SDK integrated with **OpenRouter.ai**
+- **Model**: Liquid LFM (Reasoning/Thinking) for superior logic
+- **Exporting**: jsPDF for high-fidelity document generation
+- **Database**: Local JSON persistence with audit capabilities
+- **Icons**: Lucide React + Interactive SVG Animations
 
 ## Project Structure
 
@@ -164,13 +210,13 @@ npm start
 
 ## Configuration
 
-### OpenAI Model
+### AI Model Configuration
 
-The application uses GPT-4o by default. To use a different model, edit `src/services/openaiService.js`:
+The application is configured to use OpenRouter.ai to access state-of-the-art Reasoning models. To change the model, edit `src/services/openaiService.js`:
 
 ```javascript
 const response = await openai.chat.completions.create({
-  model: 'gpt-4o', // Change to 'gpt-3.5-turbo' for lower cost
+  model: 'liquid/lfm-2.5-1.2b-thinking:free', // Replace with 'openai/gpt-4o' etc.
   // ...
 });
 ```

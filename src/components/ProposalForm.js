@@ -70,24 +70,20 @@ export default function ProposalForm({ onSubmit, loading, disabled }) {
   ];
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-      <div className="bg-gradient-to-r from-primary-500 to-primary-600 px-6 py-4">
-        <h2 className="text-xl font-semibold text-white">
-          Client Information
-        </h2>
-        <p className="text-primary-100 text-sm mt-1">
-          Enter client details to generate a customized proposal
-        </p>
+    <div className="space-y-8">
+      <div>
+        <h3 className="text-sm font-bold uppercase tracking-widest text-rayeva-emerald mb-1">Configuration</h3>
+        <p className="text-slate-400 text-sm">Define the parameters for your next sustainable venture.</p>
       </div>
 
-      <form onSubmit={handleSubmit} className="p-6 space-y-6">
+      <form onSubmit={handleSubmit} className="space-y-6">
         {/* Client Name */}
-        <div>
+        <div className="group">
           <label
             htmlFor="clientName"
-            className="block text-sm font-medium text-gray-700 mb-2"
+            className="block text-xs font-bold text-slate-500 mb-2 uppercase tracking-tight group-focus-within:text-rayeva-emerald transition-colors"
           >
-            Client Name <span className="text-red-500">*</span>
+            Partner / Client Name
           </label>
           <input
             type="text"
@@ -95,28 +91,27 @@ export default function ProposalForm({ onSubmit, loading, disabled }) {
             name="clientName"
             value={formData.clientName}
             onChange={handleChange}
-            placeholder="e.g., GreenTech Solutions Inc."
+            placeholder="e.g. EcoSphere Logistics"
             disabled={disabled}
-            className={`w-full px-4 py-3 text-gray-900 rounded-lg border ${errors.clientName
-              ? 'border-red-500 focus:ring-red-500'
-              : 'border-gray-300 focus:ring-primary-500'
-              } focus:outline-none focus:ring-2 focus:border-transparent transition-colors disabled:bg-gray-100 disabled:cursor-not-allowed`}
+            className={`premium-input ${errors.clientName ? 'border-red-300 bg-red-50/30' : ''}`}
           />
           {errors.clientName && (
-            <p className="mt-1 text-sm text-red-500">{errors.clientName}</p>
+            <p className="mt-2 text-xs font-medium text-red-500 flex items-center gap-1">
+              <span className="w-1 h-1 bg-red-500 rounded-full" /> {errors.clientName}
+            </p>
           )}
         </div>
 
         {/* Total Budget */}
-        <div>
+        <div className="group">
           <label
             htmlFor="totalBudget"
-            className="block text-sm font-medium text-gray-700 mb-2"
+            className="block text-xs font-bold text-slate-500 mb-2 uppercase tracking-tight group-focus-within:text-rayeva-emerald transition-colors"
           >
-            Total Budget (USD) <span className="text-red-500">*</span>
+            Investment Scale (USD)
           </label>
           <div className="relative">
-            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 font-medium">
+            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-bold">
               $
             </span>
             <input
@@ -125,54 +120,42 @@ export default function ProposalForm({ onSubmit, loading, disabled }) {
               name="totalBudget"
               value={formData.totalBudget}
               onChange={handleChange}
-              placeholder="e.g., 50000"
+              placeholder="0.00"
               min="1"
               step="0.01"
               disabled={disabled}
-              className={`w-full pl-8 pr-4 py-3 text-gray-900 rounded-lg border ${errors.totalBudget
-                ? 'border-red-500 focus:ring-red-500'
-                : 'border-gray-300 focus:ring-primary-500'
-                } focus:outline-none focus:ring-2 focus:border-transparent transition-colors disabled:bg-gray-100 disabled:cursor-not-allowed`}
+              className={`premium-input pl-8 ${errors.totalBudget ? 'border-red-300 bg-red-50/30' : ''}`}
             />
           </div>
           {errors.totalBudget && (
-            <p className="mt-1 text-sm text-red-500">{errors.totalBudget}</p>
+            <p className="mt-2 text-xs font-medium text-red-500 flex items-center gap-1">
+              <span className="w-1 h-1 bg-red-500 rounded-full" /> {errors.totalBudget}
+            </p>
           )}
-          <p className="mt-1 text-xs text-gray-500">
-            Enter the total budget available for sustainable products
-          </p>
         </div>
 
         {/* Sustainability Goals */}
-        <div>
+        <div className="group">
           <label
             htmlFor="sustainabilityGoals"
-            className="block text-sm font-medium text-gray-700 mb-2"
+            className="block text-xs font-bold text-slate-500 mb-2 uppercase tracking-tight group-focus-within:text-rayeva-emerald transition-colors"
           >
-            Sustainability Goals <span className="text-red-500">*</span>
+            Mission Objectives
           </label>
           <textarea
             id="sustainabilityGoals"
             name="sustainabilityGoals"
             value={formData.sustainabilityGoals}
             onChange={handleChange}
-            placeholder="e.g., Reduce plastic waste, achieve carbon neutrality, switch to recycled materials..."
+            placeholder="Describe the desired environmental impact..."
             rows={4}
             disabled={disabled}
-            className={`w-full px-4 py-3 text-gray-900 rounded-lg border ${errors.sustainabilityGoals
-              ? 'border-red-500 focus:ring-red-500'
-              : 'border-gray-300 focus:ring-primary-500'
-              } focus:outline-none focus:ring-2 focus:border-transparent transition-colors resize-none disabled:bg-gray-100 disabled:cursor-not-allowed`}
+            className={`premium-input resize-none ${errors.sustainabilityGoals ? 'border-red-300 bg-red-50/30' : ''}`}
           />
-          {errors.sustainabilityGoals && (
-            <p className="mt-1 text-sm text-red-500">
-              {errors.sustainabilityGoals}
-            </p>
-          )}
 
-          {/* Goal Presets */}
-          <div className="mt-3">
-            <p className="text-xs text-gray-500 mb-2">Quick select:</p>
+          {/* Goal Chips */}
+          <div className="mt-4">
+            <p className="text-[10px] font-bold text-slate-400 mb-3 uppercase tracking-widest">Suggested Milestones</p>
             <div className="flex flex-wrap gap-2">
               {goalPresets.map((goal) => (
                 <button
@@ -185,7 +168,7 @@ export default function ProposalForm({ onSubmit, loading, disabled }) {
                     }))
                   }
                   disabled={disabled}
-                  className="text-xs px-3 py-1 bg-primary-50 text-primary-700 rounded-full hover:bg-primary-100 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="text-[11px] font-bold px-3 py-1.5 rounded-lg bg-slate-50 text-slate-500 border border-slate-100 hover:bg-rayeva-lime/20 hover:text-rayeva-emerald hover:border-rayeva-lime/30 transition-all active:scale-95 disabled:opacity-50"
                 >
                   {goal}
                 </button>
@@ -194,60 +177,35 @@ export default function ProposalForm({ onSubmit, loading, disabled }) {
           </div>
         </div>
 
-        {/* Submit Button */}
-        <button
-          type="submit"
-          disabled={disabled || loading}
-          className="w-full bg-primary-600 text-white font-semibold py-4 px-6 rounded-lg hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 transition-all disabled:bg-gray-400 disabled:cursor-not-allowed flex items-center justify-center space-x-2"
-        >
-          {loading ? (
-            <>
-              <div className="loader-generate">
-                <div></div>
-                <div></div>
-                <div></div>
-              </div>
-              <span>Generating Proposal...</span>
-            </>
-          ) : (
-            <>
-              <svg
-                className="w-5 h-5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M13 10V3L4 14h7v7l9-11h-7z"
-                />
-              </svg>
-              <span>Generate Proposal</span>
-            </>
-          )}
-        </button>
-
-        {/* Info Note */}
-        <div className="flex items-start space-x-3 bg-blue-50 p-4 rounded-lg">
-          <svg
-            className="w-5 h-5 text-blue-500 mt-0.5 flex-shrink-0"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
+        {/* Action Button */}
+        <div className="pt-4">
+          <button
+            type="submit"
+            disabled={disabled || loading}
+            className="btn-primary w-full group py-4 h-14 flex items-center justify-center glow-on-hover"
           >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-            />
-          </svg>
-          <p className="text-sm text-blue-700">
-            Our AI will analyze your requirements and generate a comprehensive
-            proposal with sustainable product recommendations, budget allocation,
-            and environmental impact metrics.
+            {loading ? (
+              <div className="loader-generate">
+                <div /> <div /> <div />
+              </div>
+            ) : (
+              <div className="flex items-center gap-3">
+                <span className="text-sm font-bold uppercase tracking-widest">Initialize Generation</span>
+                <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+              </div>
+            )}
+          </button>
+        </div>
+
+        {/* AI Assurance */}
+        <div className="p-4 rounded-2xl bg-slate-50 flex items-start gap-4 border border-slate-100">
+          <div className="w-8 h-8 rounded-lg bg-white shadow-sm flex items-center justify-center shrink-0">
+            <span className="text-rayeva-emerald animate-pulse">✨</span>
+          </div>
+          <p className="text-[11px] text-slate-500 leading-relaxed italic">
+            "The Pulse engine will cross-reference 4,000+ sustainable data points to design an optimal strategy based on your mission objectives."
           </p>
         </div>
       </form>

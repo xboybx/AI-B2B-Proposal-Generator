@@ -34,57 +34,83 @@ export default function LoadingState() {
   }, []);
 
   return (
-    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
-      <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full mx-4">
-        <div className="text-center">
-          {/* Animated Icon */}
-          <div className="relative w-24 h-24 mx-auto mb-6">
-            <div className="absolute inset-0 bg-primary-100 rounded-full animate-pulse-green" />
-            <div className="absolute inset-4 bg-primary-200 rounded-full animate-ping opacity-20" />
-            <div className="absolute inset-0 flex items-center justify-center">
-              <svg
-                className="w-12 h-12 text-primary-600"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={1.5}
-                  d="M13 10V3L4 14h7v7l9-11h-7z"
-                />
-              </svg>
+    <div className="fixed inset-0 bg-rayeva-sand/40 backdrop-blur-md flex items-center justify-center z-[100] page-fade-in transition-all duration-500">
+      <div className="glass-card rounded-[40px] p-12 max-w-md w-full mx-4 shadow-2xl border-none relative overflow-hidden">
+        {/* Decorative elements */}
+        <div className="absolute -top-24 -right-24 w-48 h-48 bg-rayeva-lime/20 rounded-full blur-3xl animate-slow-pulse" />
+        <div className="absolute -bottom-24 -left-24 w-48 h-48 bg-rayeva-emerald/10 rounded-full blur-3xl animate-slow-pulse" />
+
+        <div className="text-center relative">
+          {/* AI Orb Loader - Re-imagined for 2026 */}
+          <div className="ai-orb-container group">
+            <div className="ai-orb-glow" />
+            <div className="ai-orb-core">
+              <div className="ai-orb-layer" />
+              <div className="ai-orb-layer-alt" />
+              <div className="ai-orb-inner-ring" />
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="w-12 h-12 bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 flex items-center justify-center rotate-3 group-hover:rotate-12 transition-transform duration-700">
+                  <div className="w-6 h-6 bg-rayeva-emerald rounded-lg flex items-center justify-center shadow-lg shadow-emerald-500/20">
+                    <span className="text-rayeva-lime font-bold text-xs uppercase">R</span>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
 
-          {/* Title */}
-          <h3 className="text-xl font-semibold text-gray-900 mb-2">
-            Generating Your Proposal
-          </h3>
+          {/* Legacy Loading Pulse (Commented for fallback)
+          <div className="relative w-32 h-32 mx-auto mb-10 group">
+            <div className="absolute inset-0 bg-rayeva-emerald/5 rounded-full scale-150 animate-pulse" />
+            <div className="absolute inset-0 border-2 border-rayeva-emerald/10 rounded-full animate-[spin_10s_linear_infinite]" />
+            <div className="absolute inset-4 border border-rayeva-lime/30 rounded-full animate-[spin_5s_linear_infinite_reverse]" />
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="w-16 h-16 bg-white rounded-3xl shadow-xl shadow-rayeva-emerald/10 flex items-center justify-center rotate-3 group-hover:rotate-12 transition-transform duration-700">
+                <div className="w-8 h-8 bg-rayeva-emerald rounded-lg flex items-center justify-center">
+                  <span className="text-rayeva-lime font-bold text-lg">R</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          */}
 
-          {/* Loading Message */}
-          <p className="text-gray-600 mb-6 h-6 transition-all duration-500">
-            {loadingMessages[messageIndex]}
-          </p>
-
-          {/* Progress Bar */}
-          <div className="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
-            <div
-              className="bg-gradient-to-r from-primary-500 to-primary-600 h-full rounded-full transition-all duration-500 ease-out"
-              style={{ width: `${Math.min(progress, 100)}%` }}
-            />
+          {/* Title and Messaging */}
+          <div className="space-y-3 mb-10">
+            <h3 className="text-2xl font-display font-bold text-slate-900 tracking-tight">
+              Calibrating Data
+            </h3>
+            <p className="text-sm font-bold text-slate-400 h-6 transition-all duration-500 uppercase tracking-[0.2em] flex items-center justify-center gap-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-rayeva-emerald animate-pulse" />
+              {loadingMessages[messageIndex]}
+            </p>
           </div>
 
-          {/* Progress Percentage */}
-          <p className="text-sm text-gray-500 mt-2">
-            {Math.min(Math.round(progress), 100)}% complete
-          </p>
+          {/* Elegant Progress Bar */}
+          <div className="relative px-4">
+            <div className="w-full bg-slate-100 rounded-full h-1.5 overflow-hidden">
+              <div
+                className="bg-rayeva-emerald h-full rounded-full transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] shadow-[0_0_10px_rgba(6,78,59,0.3)]"
+                style={{ width: `${Math.min(progress, 100)}%` }}
+              />
+            </div>
 
-          {/* Info Note */}
-          <p className="text-xs text-gray-400 mt-6">
-            This may take up to 30 seconds. Please don&apos;t close this window.
-          </p>
+            {/* Progress Info */}
+            <div className="flex justify-between items-center mt-4 px-1">
+              <span className="text-[10px] font-bold text-slate-300 uppercase tracking-widest">
+                Engine Load: {Math.min(Math.round(progress), 100)}%
+              </span>
+              <span className="text-[10px] font-bold text-rayeva-emerald uppercase tracking-widest animate-pulse">
+                Processing v4.0.2
+              </span>
+            </div>
+          </div>
+
+          {/* Discreet Notice */}
+          <div className="mt-12 flex items-center justify-center gap-2 text-[9px] font-bold text-slate-300 uppercase tracking-[0.3em]">
+            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+            </svg>
+            Secure Neural Pipeline
+          </div>
         </div>
       </div>
     </div>
