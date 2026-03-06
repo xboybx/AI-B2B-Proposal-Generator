@@ -88,7 +88,7 @@ Provide a comprehensive proposal with product recommendations and impact metrics
     logger.logPrompt({
       systemPrompt: SYSTEM_PROMPT,
       userPrompt,
-      model: 'sourceful/riverflow-v2-pro',
+      model: 'google/gemini-2.0-flash-001',
       timestamp: new Date().toISOString(),
     });
 
@@ -100,7 +100,7 @@ Provide a comprehensive proposal with product recommendations and impact metrics
     for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
       try {
         const response = await openai.chat.completions.create({
-          model: 'sourceful/riverflow-v2-pro',
+          model: 'google/gemini-2.0-flash-001',
           messages: [
             { role: 'system', content: SYSTEM_PROMPT },
             { role: 'user', content: userPrompt },
@@ -180,7 +180,7 @@ Provide a comprehensive proposal with product recommendations and impact metrics
 export async function testConnection() {
   try {
     const response = await openai.chat.completions.create({
-      model: 'sourceful/riverflow-v2-pro',
+      model: 'google/gemini-2.0-flash-001',
       messages: [{ role: 'user', content: 'Hello' }],
       max_tokens: 10,
     });
